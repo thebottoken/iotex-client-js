@@ -1,14 +1,15 @@
-# flowtype-boilerplate
+# iotex-client-js
 
 ```bash
-nvm use 8.11.4
+nvm use 8.12.0
 npm install
 
-# prepare environment variable
-cp ./.env.tmpl ./.env
-npm run watch
+# test
+npm run test
 
-# deploy
-npm run build-production
-npm run start
+# build
+npm run build
+
+# publish
+npm publish
 ```
