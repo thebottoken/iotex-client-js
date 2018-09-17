@@ -19,7 +19,8 @@
     "size": "ls -lh dist/",
     "bp": "npm run build && npm run size",
     "build": "babel src/*.js src/**/*.js --ignore src/**/*.test.js -d dist",
-    "build:watch": "babel --watch src/**/*.js -d dist"
+    "build:watch": "babel --watch src/**/*.js -d dist",
+    "prepublish": "npm run build"
   },
   "nyc": {
     "include": [
