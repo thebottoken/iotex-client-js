@@ -3,7 +3,7 @@ import {get} from 'dotty';
 import type {Provider} from './provider';
 import {encodeInputData, getAbiFunctions} from './abi-to-byte';
 
-const NONCE_DELTA = 1;
+// const NONCE_DELTA = 1;
 
 type Opts = {
   provider: Provider,
@@ -78,7 +78,7 @@ export class IotexClient {
   }
 
   async _signContractAbi({data, value}: { data: string, value: number }) {
-    const nonce = await this.getLatestNonce(this.opts.wallet.rawAddress) + NONCE_DELTA;
+    const nonce = await this.getNextNonce(this.opts.wallet.rawAddress);
     const request = {
       rawTransaction: {
         byteCode: data || '',
@@ -101,7 +101,7 @@ export class IotexClient {
     return await this.provider.send({method: 'JsonRpc.sendTransaction', params: [request]});
   }
 
-  async getLatestNonce(address: string) {
+  async getNextNonce(address: string) {
     const resp = await this.provider.send({
       method: 'JsonRpc.getAddressId',
       params: [{id: address}],
