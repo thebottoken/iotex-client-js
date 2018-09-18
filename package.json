@@ -1,6 +1,6 @@
 {
   "name": "iotex-client-js",
-  "version": "0.0.2-beta",
+  "version": "0.0.3",
   "description": "IoTeX Client",
   "main": "index.js",
   "files": [
@@ -18,7 +18,7 @@
     "postinstall": "npm run flow-install",
     "size": "ls -lh dist/",
     "bp": "npm run build && npm run size",
-    "build": "babel src/*.js src/**/*.js --ignore src/**/*.test.js -d dist",
+    "build": "rm -rf ./dist && babel src/ --ignore **/__test__/**,src/**/**.test.js -d dist",
     "build:watch": "babel --watch src/**/*.js -d dist",
     "prepublish": "npm run build"
   },
