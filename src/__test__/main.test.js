@@ -1,7 +1,7 @@
 import test from 'ava';
 import {IotexClient} from '../iotex-client';
 
-test('IotexClient.getLatestNonce', async t => {
+test('IotexClient.getNextNonce', async t => {
   const mockProvider = {
     async send(request) {
       t.deepEqual(request, {method: 'JsonRpc.getAddressId', params: [{id: {id: 'id'}}]});
@@ -20,5 +20,5 @@ test('IotexClient.getLatestNonce', async t => {
     },
   });
   t.truthy(client);
-  await client.getLatestNonce({id: 'id'});
+  await client.getNextNonce({id: 'id'});
 });
