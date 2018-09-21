@@ -1,6 +1,6 @@
 {
   "name": "iotex-client-js",
-  "version": "0.0.5-webpack",
+  "version": "0.0.5",
   "description": "IoTeX Client",
   "main": "index.js",
   "files": [
@@ -18,8 +18,7 @@
     "postinstall": "npm run flow-install",
     "size": "ls -lh dist/",
     "bp": "npm run build && npm run size",
-    "build-babel": "rm -rf ./dist && babel src/ --ignore **/__test__/**,src/**/**.test.js -d dist",
-    "build": "rm -rf ./dist && webpack src/main.js -o dist/main.js --config ./webpack.js",
+    "build": "rm -rf ./dist && babel src/ --ignore **/__test__/**,src/**/**.test.js -d dist",
     "build:watch": "babel --watch src/**/*.js -d dist",
     "prepublish": "npm run build"
   },
@@ -55,6 +54,7 @@
   },
   "homepage": "https://github.com/iotexproject/iotex-client-js#readme",
   "devDependencies": {
+    "solc": "^0.4.25",
     "@babel/cli": "7.0.0",
     "@babel/core": "7.0.1",
     "@babel/plugin-proposal-object-rest-spread": "7.0.0",
@@ -80,11 +80,7 @@
     "global": "4.3.2",
     "jsdom": "12.0.0",
     "jsdom-global": "3.0.2",
-    "nyc": "13.0.1",
-    "solc": "^0.4.25",
-    "webpack": "^4.19.1",
-    "webpack-bundle-analyzer": "^3.0.2",
-    "webpack-cli": "^3.1.0"
+    "nyc": "13.0.1"
   },
   "engines": {
     "node": "8.12.0",
