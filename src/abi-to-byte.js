@@ -1,15 +1,8 @@
-import fs from 'fs';
-import path from 'path';
 import ethereumjs from 'ethereumjs-abi';
 import hash from 'js-sha3';
-import solc from 'solc';
 import {decodeAddress} from './decode-address';
 
-export function getAbiFunctions({solFile, contractName}) {
-  const input = fs.readFileSync(path.resolve(solFile));
-  const output = solc.compile(input.toString(), 1);
-  const abi = JSON.parse(output.contracts[contractName].interface);
-
+export function getAbiFunctions(abi) {
   const abiFunctions = {};
   abi.forEach(f => {
     if (f.type === 'function') {

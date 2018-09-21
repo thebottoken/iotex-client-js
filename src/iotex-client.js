@@ -7,8 +7,7 @@ import {encodeInputData, getAbiFunctions} from './abi-to-byte';
 
 type Opts = {
   provider: Provider,
-  solFile: string,
-  contractName: string,
+  abi: any,
   contractAddress: string,
   wallet: {
     publicKey: string,
@@ -44,7 +43,7 @@ export class IotexClient {
   constructor(opts: Opts) {
     this.opts = opts;
     this.provider = opts.provider;
-    this._abiFunctions = getAbiFunctions({solFile: opts.solFile, contractName: opts.contractName});
+    this._abiFunctions = getAbiFunctions(opts.abi);
 
     // mount methods
     this.methods = {};

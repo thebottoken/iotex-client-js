@@ -1,10 +1,16 @@
+import fs from 'fs';
+import path from 'path';
 import test from 'ava';
+import solc from 'solc';
 import {encodeArguments, encodeInputData, getAbiFunctions, getHeaderHash} from '../abi-to-byte';
 
 test('getAbiFunctions', async t => {
   const solFile = './src/__test__/RollDice.sol';
   const contractName = ':RollDice';
-  const abiFunctions = getAbiFunctions({solFile, contractName});
+  const input = fs.readFileSync(path.resolve(solFile));
+  const output = solc.compile(input.toString(), 1);
+  const abi = JSON.parse(output.contracts[contractName].interface);
+  const abiFunctions = getAbiFunctions(abi);
   t.deepEqual({
     rollAward: {
       constant: false,

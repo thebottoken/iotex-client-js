@@ -1,16 +1,26 @@
+import fs from 'fs';
+import path from 'path';
 import test from 'ava';
+import solc from 'solc';
 import {IotexClient} from '../iotex-client';
 
 test('IotexClient.getNextNonce', async t => {
   const mockProvider = {
     async send(request) {
-      t.deepEqual(request, {method: 'JsonRpc.getAddressId', params: [{id: {id: 'id'}}]});
+      t.deepEqual(request, {method: 'JsonRpc.getAddressId', params: [{id: 'id'}]});
+      return {
+        result: {},
+      };
     },
   };
-
+  const solFile = './src/__test__/RollDice.sol';
+  const contractName = ':RollDice';
+  const input = fs.readFileSync(path.resolve(solFile));
+  const output = solc.compile(input.toString(), 1);
+  const abi = JSON.parse(output.contracts[contractName].interface);
   const client = new IotexClient({
     provider: mockProvider,
-    solFile: './src/__test__/RollDice.sol',
+    abi,
     contractName: ':RollDice',
     contractAddress: 'io1qyqsyqcy9lplv3cunf345e42lw77sa93p0qvlyl8eqctsq',
     wallet: {
@@ -20,5 +30,5 @@ test('IotexClient.getNextNonce', async t => {
     },
   });
   t.truthy(client);
-  await client.getNextNonce({id: 'id'});
+  await client.getNextNonce('id');
 });
