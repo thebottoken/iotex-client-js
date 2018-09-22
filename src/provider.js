@@ -29,12 +29,21 @@ export class JsonRpcProvider implements Provider {
   }
 
   async send(request: Request) {
-    const resp = await this.axios.post('/', {
-      jsonrpc: '2.0',
-      id: 0,
-      method: request.method,
-      params: request.params || [],
-    });
+    let resp;
+    try {
+      resp = await this.axios.post('/', {
+        jsonrpc: '2.0',
+        id: 0,
+        method: request.method,
+        params: request.params || [],
+      });
+    } catch (e) {
+      return {
+        error: 'NETWORK_ERROR',
+        message: 'cannot send request',
+      };
+    }
+
     return resp.data;
   }
 }
