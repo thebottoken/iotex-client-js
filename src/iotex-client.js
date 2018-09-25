@@ -49,6 +49,7 @@ export class IotexClient {
     this.methods = {};
     for (const func in this._abiFunctions) {
       if (this._abiFunctions.hasOwnProperty(func)) {
+        // eslint-disable-next-line max-statements
         this.methods[func] = async(...args) => {
           const abiFunc = this._abiFunctions[func];
           const userInput = {};
@@ -61,6 +62,17 @@ export class IotexClient {
 
           const data = encodeInputData(this._abiFunctions, func, userInput);
           const value = get(args, `${args.length - 1}.value`);
+
+          // constant function
+          if (this._abiFunctions[func].constant) {
+            const {error, result} = await this._readExecutionState({data, input: userInput});
+            if (error) {
+              throw new Error(`cannot readExecutionState: ${JSON.stringify(error)}`);
+            }
+            return result;
+          }
+
+          // non-constant function
           const resp = await this._signContractAbi({data, value});
           if (resp.error) {
             throw new Error(`cannot signContractAbi: ${JSON.stringify(resp.error)}`);
@@ -113,5 +125,29 @@ export class IotexClient {
       {method: 'JsonRpc.getReceiptByExecutionId', params: [hash]}
     );
     return resp && resp.result && resp.result;
+  }
+
+  async _readExecutionState({data}: {data: string}) {
+    const nonce = await this.getNextNonce(this.opts.wallet.rawAddress);
+    const request = {
+      ID: '',
+      amount: 0,
+      version: 0x1,
+      nonce: parseInt(nonce, 10),
+      signature: '',
+      executor: this.opts.wallet.rawAddress,
+      contract: this.opts.contractAddress,
+      executorPubKey: this.opts.wallet.publicKey,
+      gas: 1000000,
+      gasPrice: 0,
+      data,
+      timestamp: 0,
+      blockID: '',
+      isPending: false,
+    };
+
+    return await this.provider.send(
+      {method: 'JsonRpc.readExecutionState', params: [request]}
+    );
   }
 }

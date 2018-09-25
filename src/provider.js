@@ -39,8 +39,10 @@ export class JsonRpcProvider implements Provider {
       });
     } catch (e) {
       return {
-        error: 'NETWORK_ERROR',
-        message: 'cannot send request',
+        error: {
+          code: -32601,
+          message: 'Network Error: cannot send request',
+        },
       };
     }
 
