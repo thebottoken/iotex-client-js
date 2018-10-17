@@ -19,6 +19,7 @@ class Web3 {
     core.packageInit(this, arguments);
 
     this.iotx = new Iotx(this);
+    this.eth = this.iotx;
 
     // overwrite package setProvider
     const setProvider = this.setProvider;

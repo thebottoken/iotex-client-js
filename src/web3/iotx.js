@@ -1,10 +1,12 @@
-/* eslint-disable func-names */
+/* eslint-disable func-names,consistent-this,no-use-before-define */
 import core from 'web3-core';
 import Method from 'web3-core-method';
 const _ = require('underscore');
 const utils = require('web3-utils');
 const helpers = require('web3-core-helpers');
 const formatter = helpers.formatters;
+const BaseContract = require('./contract').Contract;
+const {Accounts} = require('./accounts');
 
 const blockCall = function(args) {
   return (_.isString(args[0]) && args[0].indexOf('0x') === 0) ? 'eth_getBlockByHash' : 'eth_getBlockByNumber';
@@ -28,10 +30,84 @@ const uncleCountCall = function(args) {
 
 class Iotx {
   constructor() {
-    const self = this;
+    const _this = this;
 
     // sets _requestmanager etc
     core.packageInit(this, arguments);
+
+    // overwrite setProvider
+    const setProvider = this.setProvider;
+    this.setProvider = function() {
+      setProvider.apply(_this, arguments);
+      _this.net.setProvider.apply(_this, arguments);
+      _this.personal.setProvider.apply(_this, arguments);
+      _this.accounts.setProvider.apply(_this, arguments);
+      _this.Contract.setProvider(_this.currentProvider, _this.accounts);
+    };
+
+    let defaultAccount = null;
+    let defaultBlock = 'latest';
+
+    Object.defineProperty(this, 'defaultAccount', {
+      get() {
+        return defaultAccount;
+      },
+      set(val) {
+        if (val) {
+          defaultAccount = utils.toChecksumAddress(formatter.inputAddressFormatter(val));
+        }
+
+        // also set on the Contract object
+        _this.Contract.defaultAccount = defaultAccount;
+        _this.personal.defaultAccount = defaultAccount;
+
+        // update defaultBlock
+        methods.forEach(function(method) {
+          method.defaultAccount = defaultAccount;
+        });
+
+        return val;
+      },
+      enumerable: true,
+    });
+    Object.defineProperty(this, 'defaultBlock', {
+      get() {
+        return defaultBlock;
+      },
+      set(val) {
+        defaultBlock = val;
+        // also set on the Contract object
+        _this.Contract.defaultBlock = defaultBlock;
+        _this.personal.defaultBlock = defaultBlock;
+
+        // update defaultBlock
+        methods.forEach(function(method) {
+          method.defaultBlock = defaultBlock;
+        });
+
+        return val;
+      },
+      enumerable: true,
+    });
+
+    // add accounts
+    this.accounts = new Accounts(this.currentProvider);
+
+    // create a proxy Contract type for this instance, as a Contract's provider
+    // is stored as a class member rather than an instance variable. If we do
+    // not create this proxy type, changing the provider in one instance of
+    // web3-eth would subsequently change the provider for _all_ contract
+    // instances!
+    class Contract extends BaseContract {
+      constructor(...args) {
+        super(...args);
+        this.setProvider(_this.currentProvider, _this.accounts);
+      }
+
+      defaultAccount = _this.defaultAccount;
+      defaultBlock = _this.defaultBlock;
+    }
+    this.Contract = Contract;
 
     const methods = [
       new Method({
@@ -242,10 +318,10 @@ class Iotx {
     ];
 
     methods.forEach(method => {
-      method.attachToObject(self);
-      method.setRequestManager(self._requestManager, self.accounts); // second param means is eth.accounts (necessary for wallet signing)
-      method.defaultBlock = self.defaultBlock;
-      method.defaultAccount = self.defaultAccount;
+      method.attachToObject(_this);
+      method.setRequestManager(_this._requestManager, _this.accounts); // second param means is eth.accounts (necessary for wallet signing)
+      method.defaultBlock = _this.defaultBlock;
+      method.defaultAccount = _this.defaultAccount;
     });
   }
 }
