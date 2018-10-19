@@ -1,10 +1,11 @@
 /* eslint-disable func-names,consistent-this,no-use-before-define */
-import core from 'web3-core';
 import Method from 'web3-core-method';
+import core from './core';
 const _ = require('underscore');
 const utils = require('web3-utils');
 const helpers = require('web3-core-helpers');
 const formatter = helpers.formatters;
+const iotxFormatter = require('./core-helpers').formatter;
 const BaseContract = require('./contract').Contract;
 const {Accounts} = require('./accounts');
 
@@ -161,9 +162,9 @@ class Iotx {
       }),
       new Method({
         name: 'getBalance',
-        call: 'eth_getBalance',
+        call: 'Web3API.GetBalance',
         params: 2,
-        inputFormatter: [formatter.inputAddressFormatter, formatter.inputDefaultBlockNumberFormatter],
+        inputFormatter: [iotxFormatter.inputAddressFormatter, formatter.inputDefaultBlockNumberFormatter],
         outputFormatter: formatter.outputBigNumberFormatter,
       }),
       new Method({

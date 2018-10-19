@@ -1,4 +1,4 @@
-import core from 'web3-core';
+import core from './core';
 
 export class Contract {
   constructor(jsonInterface, address, options) {

@@ -2,11 +2,11 @@ import fs from 'fs';
 import path from 'path';
 import test from 'ava';
 import solc from 'solc';
-import {IotexClient} from '../../iotex-client';
-import {JsonRpcProvider} from '../../provider';
+import {IotexClient} from '../../../iotex-client';
+import {JsonRpcProvider} from '../../../provider';
 
 test('IotexClient.getReceiptByExecutionId', async t => {
-  const solFile = './src/__test__/integration/CodeNameCollector.sol';
+  const solFile = './src/__test__/integration/contract/CodeNameCollector.sol';
   const contractName = ':CodeNameCollector';
   const input = fs.readFileSync(path.resolve(solFile));
   const output = solc.compile(input.toString(), 1);

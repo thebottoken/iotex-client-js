@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
 import test from 'ava';
+import {TEST_PROVIDER_URL} from '../test-config';
 const fs = require('fs');
 const path = require('path');
 const solc = require('solc');
 const console = require('global/console');
-const {Web3} = require('../../web3/web3');
+const {Web3} = require('../../../web3/web3');
 
-const PROVIDER_URL = 'http://127.0.0.1:7545';
 const SOL_FILE = './src/__test__/RollDice.sol';
 const CONTRACT_NAME = ':RollDice';
 const OWNER_ADDR = 'OWNER_ADDR';
@@ -14,7 +14,7 @@ const PLAYER_ADDR = 'PLAYER_ADDR';
 
 test.skip('contract deploy', async t => {
   // Connect to local Ethereum node
-  const web3 = new Web3(new Web3.providers.HttpProvider(PROVIDER_URL));
+  const web3 = new Web3(new Web3.providers.HttpProvider(TEST_PROVIDER_URL));
 
   // Compile the source code
   const input = fs.readFileSync(path.resolve(SOL_FILE));

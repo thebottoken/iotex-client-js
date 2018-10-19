@@ -1,6 +1,6 @@
 import utils from 'web3-utils';
-import core from 'web3-core';
 import {version} from '../../package.json';
+import core from './core';
 import {Iotx} from './iotx';
 import {Net} from './net';
 import {Personal} from './personal';

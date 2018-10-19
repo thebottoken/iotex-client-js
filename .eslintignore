@@ -4,3 +4,5 @@ _maps/*
 coverage/*
 .nyc_output/*
 flow-typed/*
+src/web3/core-requestmanager/*
+src/web3/core/*
