@@ -1,11 +1,11 @@
 /* eslint-disable func-names,consistent-this,no-use-before-define */
-import Method from 'web3-core-method';
+import Method from './core-method';
 import core from './core';
 const _ = require('underscore');
 const utils = require('web3-utils');
 const helpers = require('web3-core-helpers');
 const formatter = helpers.formatters;
-const iotxFormatter = require('./core-helpers').formatter;
+const iotxFormatter = require('./helpers');
 const BaseContract = require('./contract').Contract;
 const {Accounts} = require('./accounts');
 
@@ -144,7 +144,7 @@ class Iotx {
       }),
       new Method({
         name: 'getGasPrice',
-        call: 'eth_gasPrice',
+        call: 'Web3API.gasPrice',
         params: 0,
         outputFormatter: formatter.outputBigNumberFormatter,
       }),
@@ -162,7 +162,7 @@ class Iotx {
       }),
       new Method({
         name: 'getBalance',
-        call: 'Web3API.GetBalance',
+        call: 'Web3API.iotxGetBalance',
         params: 2,
         inputFormatter: [iotxFormatter.inputAddressFormatter, formatter.inputDefaultBlockNumberFormatter],
         outputFormatter: formatter.outputBigNumberFormatter,
@@ -231,16 +231,31 @@ class Iotx {
         inputFormatter: [null],
         outputFormatter: formatter.outputTransactionReceiptFormatter,
       }),
+      // compatibility
       new Method({
         name: 'getTransactionCount',
-        call: 'eth_getTransactionCount',
+        call: 'Web3API.IotxGetTransferCount',
         params: 2,
         inputFormatter: [formatter.inputAddressFormatter, formatter.inputDefaultBlockNumberFormatter],
         outputFormatter: utils.hexToNumber,
       }),
       new Method({
+        name: 'getTransactionCount',
+        call: 'Web3API.IotxGetTransferCount',
+        params: 2,
+        inputFormatter: [formatter.inputAddressFormatter, formatter.inputDefaultBlockNumberFormatter],
+        outputFormatter: utils.hexToNumber,
+      }),
+      // compatibility
+      new Method({
         name: 'sendSignedTransaction',
-        call: 'eth_sendRawTransaction',
+        call: 'Web3API.iotxSendRawTransfer',
+        params: 1,
+        inputFormatter: [null],
+      }),
+      new Method({
+        name: 'sendSignedTransfer',
+        call: 'Web3API.iotxSendRawTransfer',
         params: 1,
         inputFormatter: [null],
       }),
@@ -251,10 +266,17 @@ class Iotx {
         inputFormatter: [formatter.inputTransactionFormatter],
       }),
       new Method({
-        name: 'sendTransaction',
-        call: 'eth_sendTransaction',
+        name: 'sendTransfer',
+        call: 'Web3API.iotxSendTransfer',
         params: 1,
-        inputFormatter: [formatter.inputTransactionFormatter],
+        inputFormatter: [iotxFormatter.inputTransactionFormatter],
+      }),
+      // for compatibility
+      new Method({
+        name: 'sendTransaction',
+        call: 'Web3API.iotxSendTransfer',
+        params: 1,
+        inputFormatter: [iotxFormatter.inputTransactionFormatter],
       }),
       new Method({
         name: 'sign',

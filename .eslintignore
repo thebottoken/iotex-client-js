@@ -6,3 +6,4 @@ coverage/*
 flow-typed/*
 src/web3/core-requestmanager/*
 src/web3/core/*
+src/web3/core-method.js

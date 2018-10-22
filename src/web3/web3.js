@@ -6,13 +6,13 @@ import {Net} from './net';
 import {Personal} from './personal';
 
 class Web3 {
-  static version = version;
-  static modules = {
+  version = version;
+  modules = {
     Iotx,
     Net,
     Personal,
   };
-  static utils = utils;
+  utils = utils;
 
   constructor() {
     // sets _requestmanager etc
