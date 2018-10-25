@@ -16,12 +16,11 @@ test('add wallet', async t => {
 
 test.only('transfer 1 token from account A to account B', async t => {
   const web3 = new Web3(new Web3.providers.HttpProvider(TEST_PROVIDER_URL));
-  web3.eth.accounts.wallet.add(TEST_ACCOUNT.privateKey);
+  await web3.eth.accounts.wallet.add(TEST_ACCOUNT.privateKey);
 
   // create account
-  const account = web3.eth.accounts.create(['entropy']);
+  const account = await web3.eth.accounts.create(['entropy']);
   isAccount(t, account);
-  // const balBefore = await web3.eth.getBalance(account.address);
 
   // transfer 1 token
   await web3.eth.sendTransaction({

@@ -209,7 +209,7 @@ Method.prototype._confirmTransaction = function (defer, result, payload) {
   var _ethereumCalls = [
     new Method({
       name: 'getTransactionReceipt',
-      call: 'eth_getTransactionReceipt',
+      call: 'Web3API.iotxGetTransferReceipt',
       params: 1,
       inputFormatter: [null],
       outputFormatter: formatters.outputTransactionReceiptFormatter
@@ -233,9 +233,9 @@ Method.prototype._confirmTransaction = function (defer, result, payload) {
     })
   ];
   // attach methods to this._ethereumCall
-  var _ethereumCall = {};
+  var _iotxCall = {};
   _.each(_ethereumCalls, function (mthd) {
-    mthd.attachToObject(_ethereumCall);
+    mthd.attachToObject(_iotxCall);
     mthd.requestManager = method.requestManager; // assign rather than call setRequestManager()
   });
 
@@ -252,7 +252,7 @@ Method.prototype._confirmTransaction = function (defer, result, payload) {
         };
       }
       // if we have a valid receipt we don't need to send a request
-      return (existingReceipt ? promiEvent.resolve(existingReceipt) : _ethereumCall.getTransactionReceipt(result))
+      return (existingReceipt ? promiEvent.resolve(existingReceipt) : _iotxCall.getTransactionReceipt(result))
       // catch error from requesting receipt
         .catch(function (err) {
           sub.unsubscribe();
@@ -307,7 +307,7 @@ Method.prototype._confirmTransaction = function (defer, result, payload) {
               return;
             }
 
-            _ethereumCall.getCode(receipt.contractAddress, function (e, code) {
+            _iotxCall.getCode(receipt.contractAddress, function (e, code) {
 
               if (!code) {
                 return;
@@ -412,7 +412,7 @@ Method.prototype._confirmTransaction = function (defer, result, payload) {
   var startWatching = function(existingReceipt) {
     // if provider allows PUB/SUB
     if (_.isFunction(this.requestManager.provider.on)) {
-      _ethereumCall.subscribe('newBlockHeaders', checkConfirmation.bind(null, existingReceipt, false));
+      _iotxCall.subscribe('newBlockHeaders', checkConfirmation.bind(null, existingReceipt, false));
     } else {
       intervalId = setInterval(checkConfirmation.bind(null, existingReceipt, true), 1000);
     }
@@ -420,8 +420,9 @@ Method.prototype._confirmTransaction = function (defer, result, payload) {
 
 
   // first check if we already have a confirmed transaction
-  _ethereumCall.getTransactionReceipt(result)
+  _iotxCall.getTransactionReceipt(result)
     .then(function(receipt) {
+      console.log('_iotxCall.getTransactionReceipt_iotxCall.getTransactionReceipt_iotxCall.getTransactionReceipt')
       if (receipt && receipt.blockHash) {
         if (defer.eventEmitter.listeners('confirmation').length > 0) {
           // We must keep on watching for new Blocks, if a confirmation listener is present
@@ -461,7 +462,7 @@ var getWallet = function(from, accounts) {
 
 Method.prototype.buildCall = function() {
   var method = this,
-    isSendTx = (method.call === 'Web3API.iotxSendTransfer' || method.call === 'eth_sendRawTransaction'); // || method.call === 'personal_sendTransaction'
+    isSendTx = (method.call === 'Web3API.iotxSendTransfer' || method.call === 'Web3API.iotxSendRawTransfer'); // || method.call === 'personal_sendTransaction'
 
   // actual send function
   var send = function () {
@@ -513,9 +514,8 @@ Method.prototype.buildCall = function() {
     // SENDS the SIGNED SIGNATURE
     var sendSignedTx = function(sign){
 
-      // TODO(tian)
       var signedPayload = _.extend({}, payload, {
-        method: 'eth_sendRawTransaction',
+        method: 'Web3API.iotxSendRawTransfer',
         params: [sign.rawTransaction]
       });
 
@@ -525,7 +525,6 @@ Method.prototype.buildCall = function() {
 
     var sendRequest = function(payload, method) {
 
-      console.log('method && method.accounts && method.accounts.wallet && method.accounts.wallet.length', method && method.accounts && method.accounts.wallet && method.accounts.wallet.length)
       if (method && method.accounts && method.accounts.wallet && method.accounts.wallet.length) {
         var wallet;
 
@@ -536,7 +535,7 @@ Method.prototype.buildCall = function() {
 
           // If wallet was found, sign tx, and send using sendRawTransaction
           if (wallet && wallet.privateKey) {
-            return method.accounts.signTransaction(_.omit(tx, 'from'), wallet.privateKey).then(sendSignedTx);
+            return method.accounts.signTransaction(tx, wallet.privateKey).then(sendSignedTx);
           }
 
           // ETH_SIGN

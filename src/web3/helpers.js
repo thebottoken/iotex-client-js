@@ -56,9 +56,9 @@ function _txInputFormatter(options) {
     options.gas = options.gas || options.gasLimit;
   }
 
-  ['gasPrice', 'gas', 'value', 'nonce'].filter(function (key) {
+  ['gasPrice', 'gas', 'value', 'nonce'].filter(function(key) {
     return options[key] !== undefined;
-  }).forEach(function (key) {
+  }).forEach(function(key) {
     options[key] = utils.numberToHex(options[key]);
   });
 
@@ -69,7 +69,7 @@ function inputCallFormatter(options) {
 
   options = _txInputFormatter(options);
 
-  var from = options.from || (this ? this.defaultAccount : null);
+  const from = options.from || (this ? this.defaultAccount : null);
 
   if (from) {
     options.from = inputAddressFormatter(from);

@@ -7,7 +7,7 @@ const helpers = require('web3-core-helpers');
 const formatter = helpers.formatters;
 const iotxFormatter = require('./helpers');
 const BaseContract = require('./contract').Contract;
-const {Accounts} = require('./accounts');
+const {Accounts} = require('./accounts/remote-accounts');
 
 const blockCall = function(args) {
   return (_.isString(args[0]) && args[0].indexOf('0x') === 0) ? 'eth_getBlockByHash' : 'eth_getBlockByNumber';

@@ -1,4 +1,4 @@
-export const USE_IOTX = false;
+export const USE_IOTX = true;
 export const TEST_PROVIDER_URL = USE_IOTX ? 'http://127.0.0.1:14004/web3' : 'http://127.0.0.1:7545';
 export const TEST_ACCOUNT = USE_IOTX ? {
   privateKey: 'c5364b1a2d99d127439be22edfd657889981e9ba4d6d18fe8eca489d48485371efcb2400',
