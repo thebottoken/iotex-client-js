@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import test from 'ava';
 import solc from 'solc';
-import {IotexClient} from '../iotex-client';
+import {Contract} from '../contract';
 
 test('IotexClient.getNextNonce', async t => {
   const mockProvider = {
@@ -18,7 +18,7 @@ test('IotexClient.getNextNonce', async t => {
   const input = fs.readFileSync(path.resolve(solFile));
   const output = solc.compile(input.toString(), 1);
   const abi = JSON.parse(output.contracts[contractName].interface);
-  const client = new IotexClient({
+  const client = new Contract({
     provider: mockProvider,
     abi,
     contractName: ':RollDice',

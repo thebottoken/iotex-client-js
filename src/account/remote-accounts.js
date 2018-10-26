@@ -1,6 +1,7 @@
 // @flow
 import {HttpProvider} from '../provider';
 import type {Provider} from '../provider';
+import {Methods} from '../methods';
 
 type Wallet = {
   privateKey: string,
@@ -8,13 +9,31 @@ type Wallet = {
   rawAddress: string,
 };
 
-export class Accounts {
-  wallets: {[privateKey: string]: Wallet};
-  provider: Provider;
+export type RawTransfer = {
+  version: number,
+  nonce: number,
+  amount: number,
+  sender: string,
+  recipient: string,
+  payload: string,
+  isCoinbase: boolean,
+  senderPubKey: string,
+  signature: ?string,
+}
 
-  constructor(provider: Provider) {
+export class Accounts {
+  wallets: { [address: string]: Wallet };
+  remoteWallet: Provider;
+  methods: Methods;
+
+  remote: any; // should be deprecated
+
+  constructor(methods: Methods) {
     this.wallets = {};
-    this.provider = provider || new HttpProvider({url: 'https://iotexscan.io/api/wallet-core/'});
+    this.methods = methods;
+    this.remoteWallet = new HttpProvider('http://localhost:4004/api/wallet-core/');
+
+    this.remote = {};
     [
       'generateWallet',
       'unlockWallet',
@@ -23,33 +42,43 @@ export class Accounts {
       'signSmartContract',
     ].map(method => {
       // $FlowFixMe
-      this[method] = async(...args) => {
-        const resp = await this.provider.send({method, params: args});
+      this.remote[method] = async(...args) => {
+        const resp = await this.remoteWallet.send({method, params: args});
         if (resp.error) {
-          throw new Error(`failed to ${method}: ${JSON.stringify(resp.error.message)}`);
+          throw new Error(`failed to ${method}: ${JSON.stringify(resp.error)}`);
         }
         return resp.result;
       };
     });
   }
 
-  async create() {
+  async create(): Promise<Wallet> {
     // $FlowFixMe
-    const wallet = await this.generateWallet();
-    this.wallets[wallet.privateKey] = wallet;
+    const wallet = await this.remote.generateWallet();
+    this.wallets[wallet.rawAddress] = wallet;
     return wallet;
   }
 
-  async privateKeyToAccount(privateKey: string) {
+  async privateKeyToAccount(privateKey: string): Promise<Wallet> {
     // $FlowFixMe
-    const wallet = await this.unlockWallet(privateKey);
-    this.wallets[wallet.privateKey] = wallet;
+    return await this.remote.unlockWallet(privateKey);
+  }
+
+  async add(privateKey: string): Promise<Wallet> {
+    const wallet = await this.privateKeyToAccount(privateKey);
+    this.wallets[wallet.rawAddress] = wallet;
     return wallet;
   }
 
-  async signTransaction(tx: any, privateKey: string) {
+  async signTransfer(rawTransfer: RawTransfer, wallet: Wallet) {
     // getId, getGasPrice, getTransactionCount
     // sign
+    if (!rawTransfer.nonce) {
+      const details = await this.methods.getAddressDetails(wallet.rawAddress);
+      rawTransfer.nonce = details.pendingNonce;
+    }
+
+    return await this.remote.signTransfer(rawTransfer, wallet);
   }
 }
 

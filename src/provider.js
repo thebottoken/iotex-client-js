@@ -23,7 +23,7 @@ export interface Provider {
 export class HttpProvider implements Provider {
   axios: any;
 
-  constructor({url, timeout}: any) {
+  constructor(url: string, timeout: ?number) {
     this.axios = axios.create({
       baseURL: url,
       timeout: timeout || 100000,

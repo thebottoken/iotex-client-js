@@ -33,7 +33,7 @@ type SignedTransaction = {
   timestamp: number,
 };
 
-export class IotexClient {
+export class Contract {
   opts: Opts;
   provider: any;
   _abiFunctions: any;

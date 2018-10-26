@@ -2,9 +2,9 @@ import test from 'ava';
 import {Accounts} from '../remote-accounts';
 
 const TEST_WALLET = {
-  publicKey: '7226a4340c15e7666098247a82b62275d958f65886d59e4190349fa79508c3682d6b8601584bb36629718838856d01cd75993ce8ad8251509ff15ecb219450abc3990f4a32f13200',
-  privateKey: '95b99ad3bcae2667836dd426e7bf491e21d9f0e0c7c040958d26c67cf20e94568ee3a200',
-  rawAddress: 'io1qyqsyqcy8fvhk9ee75jkrs6sqwppdplt8lpd87p7k95zpk',
+  privateKey: 'c5364b1a2d99d127439be22edfd657889981e9ba4d6d18fe8eca489d48485371efcb2400',
+  publicKey: '2726440bc26449be22eb5c0564af4b23dc8c373aa79e8cb0f8df2a9e55b4842dbefcde07d95c1dc1f3d1a367086b4f7742115b53c434e8f5abf116333c2c378c51b0ef6176153602',
+  rawAddress: 'io1qyqsyqcy26zujam2gt5cut0ggu8pa4d5q7hnrvsvew32t9',
 };
 
 test('Account create', async t => {
@@ -15,9 +15,9 @@ test('Account create', async t => {
   t.truthy(wallet.rawAddress);
 });
 
-test('Account privateKeyToAccount', async t => {
+test('Account add', async t => {
   const accounts = new Accounts();
-  const wallet = await accounts.privateKeyToAccount(TEST_WALLET.privateKey);
+  const wallet = await accounts.add(TEST_WALLET.privateKey);
   t.deepEqual(wallet.publicKey, TEST_WALLET.publicKey);
   t.deepEqual(wallet.rawAddress, TEST_WALLET.rawAddress);
 });

@@ -1,3 +1,3 @@
 // @flow
-export {IotexClient} from './iotex-client';
+export {Contract} from './contract';
 export {HttpProvider} from './provider';

@@ -1,5 +1,5 @@
 import test from 'ava';
-import {Iotx} from '../iotx';
+import {Methods} from '../methods';
 
 const TEST_WALLET = {
   publicKey: '7226a4340c15e7666098247a82b62275d958f65886d59e4190349fa79508c3682d6b8601584bb36629718838856d01cd75993ce8ad8251509ff15ecb219450abc3990f4a32f13200',
@@ -8,12 +8,12 @@ const TEST_WALLET = {
 };
 
 test('getBlockchainHeight', async t => {
-  const iotx = new Iotx();
+  const iotx = new Methods();
   t.truthy(await iotx.getBlockchainHeight() > 0);
 });
 
 test('getAddressBalance', async t => {
-  const iotx = new Iotx();
+  const iotx = new Methods();
   try {
     await iotx.getAddressBalance(TEST_WALLET.rawAddress);
   } catch (e) {
