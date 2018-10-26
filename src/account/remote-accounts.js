@@ -22,7 +22,7 @@ export type RawTransfer = {
 }
 
 export class Accounts {
-  wallets: { [address: string]: Wallet };
+  wallets: { [publicKey: string]: Wallet };
   remoteWallet: Provider;
   methods: Methods;
 
@@ -55,7 +55,7 @@ export class Accounts {
   async create(): Promise<Wallet> {
     // $FlowFixMe
     const wallet = await this.remote.generateWallet();
-    this.wallets[wallet.rawAddress] = wallet;
+    this.wallets[wallet.publicKey] = wallet;
     return wallet;
   }
 
@@ -66,19 +66,17 @@ export class Accounts {
 
   async add(privateKey: string): Promise<Wallet> {
     const wallet = await this.privateKeyToAccount(privateKey);
-    this.wallets[wallet.rawAddress] = wallet;
+    this.wallets[wallet.publicKey] = wallet;
     return wallet;
   }
 
   async signTransfer(rawTransfer: RawTransfer, wallet: Wallet) {
-    // getId, getGasPrice, getTransactionCount
-    // sign
     if (!rawTransfer.nonce) {
       const details = await this.methods.getAddressDetails(wallet.rawAddress);
       rawTransfer.nonce = details.pendingNonce;
     }
 
-    return await this.remote.signTransfer(rawTransfer, wallet);
+    return await this.remote.signTransfer(wallet, rawTransfer);
   }
 }
 

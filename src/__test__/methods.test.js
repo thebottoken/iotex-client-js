@@ -8,15 +8,46 @@ const TEST_WALLET = {
 };
 
 test('getBlockchainHeight', async t => {
-  const iotx = new Methods();
-  t.truthy(await iotx.getBlockchainHeight() > 0);
+  const methods = new Methods();
+  t.truthy(await methods.getBlockchainHeight() > 0);
 });
 
 test('getAddressBalance', async t => {
-  const iotx = new Methods();
+  const methods = new Methods();
   try {
-    await iotx.getAddressBalance(TEST_WALLET.rawAddress);
+    await methods.getAddressBalance(TEST_WALLET.rawAddress);
   } catch (e) {
     t.truthy(e);
   }
 });
+
+test('getTransferByID', async t => {
+  const methods = new Methods(createMockProvider());
+  const receipt = await methods.getTransferByID('f244f2341620a9e3440c2c67b8d0f4d250d53101977e214dbe64a591ae4c93a1');
+  t.truthy(receipt.ID.length, 64);
+});
+
+function createMockProvider() {
+  return {
+    async send() {
+      return {
+        result: {
+          version: 0,
+          ID: 'f244f2341620a9e3440c2c67b8d0f4d250d53101977e214dbe64a591ae4c93a1',
+          nonce: 13202,
+          sender: 'io1qyqsyqcy222ggazmccgf7dsx9m9vfqtadw82ygwhjnxtmx',
+          recipient: 'io1qyqsyqcycl6xy302xpsgqerxzhhe0t6xxs32nk5nn6x2a9',
+          amount: 9,
+          senderPubKey: '',
+          signature: '',
+          payload: '',
+          isCoinbase: false,
+          fee: 0,
+          timestamp: 1540536369,
+          blockID: 'e61aef24ad1fff93abe937dca49534bfcdef0ca24534a3dc9d74d5af235bc19d',
+          isPending: false,
+        },
+      };
+    },
+  };
+}

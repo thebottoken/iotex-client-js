@@ -19,5 +19,4 @@ test('Account add', async t => {
   const accounts = new Accounts();
   const wallet = await accounts.add(TEST_WALLET.privateKey);
   t.deepEqual(wallet.publicKey, TEST_WALLET.publicKey);
-  t.deepEqual(wallet.rawAddress, TEST_WALLET.rawAddress);
 });

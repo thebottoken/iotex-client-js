@@ -137,7 +137,7 @@ type SendTransferRequest = {
   isCoinbase: boolean,
 }
 
-type SendTransferResponse = {
+export type SendTransferResponse = {
   hash: string,
 }
 

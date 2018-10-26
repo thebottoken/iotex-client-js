@@ -3,22 +3,21 @@ import {Iotx} from '../iotx';
 import {HttpProvider} from '../provider';
 
 const TEST_WALLET = {
-  privateKey: '1bafc0a6f9f1e939ba4b180b9bd456cd143d9806cf9046eaaaba01e78ec265524669ad00',
-  publicKey: '327ff28d33245f9921d8ab4311496ae1298dc14a0a0babdb7a6031e7bc180330577c9507e740ee30ecc5b73f0c058d2ed9b580cf7530ddddc71f644838828655e451e0c3108de102',
-  rawAddress: 'io1qyqsyqcygcadnchez8yqjuh0v5zuujuf0kcna3yg7altvn',
+  privateKey: 'c5364b1a2d99d127439be22edfd657889981e9ba4d6d18fe8eca489d48485371efcb2400',
+  publicKey: '2726440bc26449be22eb5c0564af4b23dc8c373aa79e8cb0f8df2a9e55b4842dbefcde07d95c1dc1f3d1a367086b4f7742115b53c434e8f5abf116333c2c378c51b0ef6176153602',
+  rawAddress: 'io1qyqsqqqq26zujam2gt5cut0ggu8pa4d5q7hnrvsvace4x6',
 };
 
 test.skip('transfer 1 token from account A to account B', async t => {
   const iotx = new Iotx(new HttpProvider('http://localhost:14004/'));
   await iotx.accounts.add(TEST_WALLET.privateKey);
   const acctB = await iotx.accounts.create();
-  const hash = await iotx.sendTransfer({
-    version: 0,
-    amount: 1,
+  const receipt = await iotx.sendTransfer({
+    amount: '1',
     sender: TEST_WALLET.rawAddress,
+    senderPubKey: TEST_WALLET.publicKey,
     recipient: acctB.rawAddress,
-    // payload: string,
-    // isCoinbase: boolean,
+    gasPrice: '1',
   });
-  t.truthy(hash);
+  t.truthy(receipt.ID.length, 64);
 });

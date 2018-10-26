@@ -3,6 +3,7 @@ import type {Provider} from './provider';
 import {Methods} from './methods';
 import {Accounts} from './account/remote-accounts';
 import type {RawTransfer} from './account/remote-accounts';
+import type {Transfer} from './methods';
 
 export class Iotx {
   provider: Provider;
@@ -15,15 +16,22 @@ export class Iotx {
     this.accounts = new Accounts(this.methods);
   }
 
-  async sendTransfer(transfer: RawTransfer) {
-    const wallet = this.accounts.wallets[transfer.sender];
+  async sendTransfer(transfer: RawTransfer): Promise<Transfer> {
+    const wallet = this.accounts.wallets[transfer.senderPubKey];
     if (!wallet) {
       throw new Error(`failed to sendTransfer: sender address "${transfer.sender}" is not added to accounts`);
     }
-    if (!transfer.senderPubKey) {
-      transfer.senderPubKey = wallet.publicKey;
-    }
 
-    return await this.accounts.signTransfer(transfer, wallet);
+    const signedTransfer = await this.accounts.signTransfer(transfer, wallet);
+    const adapted = {
+      ...signedTransfer,
+      // TODO(tian): to be deprecated
+      version: 1,
+      isCoinbase: false,
+      senderPubKey: transfer.senderPubKey,
+    };
+
+    const {hash} = await this.methods.sendTransfer(adapted);
+    return await this.methods.getTransferByID(hash);
   }
 }
