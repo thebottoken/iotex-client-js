@@ -18,6 +18,7 @@ test.skip('transfer 1 token from account A to account B', async t => {
     senderPubKey: TEST_WALLET.publicKey,
     recipient: acctB.rawAddress,
     gasPrice: '1',
+    gasLimit: 1,
   });
   t.truthy(receipt.ID.length, 64);
 });

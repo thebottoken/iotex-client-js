@@ -19,7 +19,18 @@ export type RawTransfer = {
   isCoinbase: boolean,
   senderPubKey: string,
   signature: ?string,
+  gasLimit: number,
+  gasPrice: number,
 }
+
+export type UnsignedExecution = {
+  byteCode: string,
+  nonce: ?number,
+  gasLimit: number,
+  version: number,
+  contract: string,
+  amount: number,
+};
 
 export class Accounts {
   wallets: { [publicKey: string]: Wallet };
@@ -45,7 +56,7 @@ export class Accounts {
       this.remote[method] = async(...args) => {
         const resp = await this.remoteWallet.send({method, params: args});
         if (resp.error) {
-          throw new Error(`failed to ${method}: ${JSON.stringify(resp.error)}`);
+          throw new Error(`failed to Accounts.${method}: ${JSON.stringify(resp.error)}`);
         }
         return resp.result;
       };
@@ -77,6 +88,15 @@ export class Accounts {
     }
 
     return await this.remote.signTransfer(wallet, rawTransfer);
+  }
+
+  async signSmartContract(wallet: Wallet, exec: UnsignedExecution): any {
+    if (!exec.nonce) {
+      const details = await this.methods.getAddressDetails(wallet.rawAddress);
+      exec.nonce = details.pendingNonce;
+    }
+
+    return await this.remote.signSmartContract(wallet, exec);
   }
 }
 

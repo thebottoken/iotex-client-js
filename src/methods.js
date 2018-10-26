@@ -52,11 +52,11 @@ type Execution = {
   nonce: number,
   executor: string,
   contract: string,
-  amount: number,
+  amount: string,
   executorPubKey: string,
   signature: string,
-  gas: number,
-  gasPrice: number,
+  gasLimit: number,
+  gasPrice: string,
   timestamp: number,
   data: string,
   blockID: string,
@@ -177,7 +177,7 @@ export class Methods {
   async send(method: string, ...args: Array<any>) {
     const resp = await this.provider.send({method: `Explorer.${method}`, params: args});
     if (resp.error) {
-      throw new Error(`failed to ${method}: ${JSON.stringify(resp.error.message)}`);
+      throw new Error(`failed to Methods.${method}: ${JSON.stringify(resp.error.message)}`);
     }
     return resp.result;
   }

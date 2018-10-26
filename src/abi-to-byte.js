@@ -50,8 +50,12 @@ export function encodeArguments(args, userInput) {
       values.push('');
     }
   });
-  const encoded = ethereumjs.rawEncode(types, values);
-  return encoded.toString('hex');
+  try {
+    const encoded = ethereumjs.rawEncode(types, values);
+    return encoded.toString('hex');
+  } catch (e) {
+    throw new Error(`failed to rawEncode: ${e.stack}`);
+  }
 }
 
 export function encodeInputData(abiFunctions, fnName, userInput) {
