@@ -1,5 +1,5 @@
 {
-  "name": "iotex-client-js",
+  "name": "iotex-client",
   "version": "0.0.6",
   "description": "IoTeX Client",
   "main": "index.js",
