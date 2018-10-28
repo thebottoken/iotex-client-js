@@ -226,6 +226,12 @@ type TSendSmartContractResponse = {
 
 /**
  * Methods is the API remote methods to call iotex blockchain.
+ * @example
+ * import {Methods} from 'iotex-client';
+ * import {HttpProvider} from 'iotex-client';
+ * const methods = new Methods(new HttpProvider('http://127.0.0.1:14004'));
+ * const height = await methods.getBlockchainHeight();
+ * const bal = await methods.getAddressBalance('io1qyqsyqcyae8h2l4w7yr9pw9qdy26rm27jwzrzqtmqqnmt3');
  */
 export class Methods {
   provider: Provider;
