@@ -1,14 +1,15 @@
 // @flow
 import {get} from 'dotty';
-import type {Provider} from './provider';
+import type {Provider} from '../provider';
+import {Accounts} from '../account/remote-accounts';
+import {Methods} from '../methods';
+import type {UnsignedExecution} from '../account/remote-accounts';
 import {encodeInputData, getAbiFunctions} from './abi-to-byte';
-import {Accounts} from './account/remote-accounts';
-import {Methods} from './methods';
-import type {UnsignedExecution} from './account/remote-accounts';
 
-// const NONCE_DELTA = 1;
-
-type ContractOpts = {
+/**
+ * TContractOpts are the settings to create the contract object with.
+ */
+type TContractOpts = {
   provider: Provider,
   abi: any,
   contractAddress: string,
@@ -22,7 +23,10 @@ type ContractOpts = {
   },
 };
 
-type SignedTransaction = {
+/**
+ * TSignedTransaction is the raw transaction to be signed.
+ */
+type TSignedTransaction = {
   version: number,
   nonce: number,
   signature: string,
@@ -39,16 +43,30 @@ type SignedTransaction = {
   timestamp: number,
 };
 
+/**
+ * Contract makes it easy to interact with smart contracts on the iotex blockchain. When you create a new contract
+ * object you give it the json interface of the respective smart contract and it will auto converts all calls into
+ * low level ABI calls over RPC for you.
+ *
+ * This allows you to interact with smart contracts as if they were JavaScript objects.
+ */
 export class Contract {
-  opts: ContractOpts;
+  opts: TContractOpts;
   provider: any;
   _abiFunctions: any;
   _iotxMethods: Methods;
   accounts: Accounts;
 
+  /**
+   * methods are the ABI's methods of the smart contract the user can call.
+   */
   methods: { [funcName: string]: any };
 
-  constructor(opts: ContractOpts) {
+  /**
+   * constructor creates a new contract instance with all its methods and events defined in its json interface object.
+   * @param opts ContractOpts are the settings to create the contract object with.
+   */
+  constructor(opts: TContractOpts) {
     this.opts = opts;
     this.provider = opts.provider;
     this._abiFunctions = getAbiFunctions(opts.abi);
@@ -100,6 +118,11 @@ export class Contract {
     }
   }
 
+  /**
+   * deploy signs an execution and then send it to the iotex blockchain.
+   * @param exec
+   * @returns
+   */
   async deploy(exec: UnsignedExecution): any {
     const signed = await this.accounts.signSmartContract(this.opts.wallet, exec);
     const {hash} = await this._iotxMethods.sendSmartContract({
@@ -130,7 +153,7 @@ export class Contract {
     return await this.provider.send({method: 'JsonRpc.signContractAbi', params: [request]});
   }
 
-  async _sendTransaction(transaction: SignedTransaction) {
+  async _sendTransaction(transaction: TSignedTransaction) {
     const request = {
       signedTransaction: transaction,
       type: 'contract',
@@ -141,13 +164,6 @@ export class Contract {
   async _getNextNonce(address: string) {
     const resp = await this._iotxMethods.getAddressDetails(address);
     return (resp && resp.pendingNonce) || 0;
-  }
-
-  async getReceiptByExecutionId(hash: string) {
-    const resp = await this.provider.send(
-      {method: 'JsonRpc.getReceiptByExecutionId', params: [hash]}
-    );
-    return resp && resp.result && resp.result;
   }
 
   async _readExecutionState({data}: { data: string }) {
@@ -177,7 +193,7 @@ export class Contract {
 
 export function contractFactory(provider: Provider, accounts: Accounts, methods: Methods) {
   return class CompositeContract extends Contract {
-    constructor(opts: ContractOpts) {
+    constructor(opts: TContractOpts) {
       super({provider, accounts, methods, ...opts});
     }
   };

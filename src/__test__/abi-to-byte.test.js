@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import test from 'ava';
 import solc from 'solc';
-import {encodeArguments, encodeInputData, getAbiFunctions, getHeaderHash} from '../abi-to-byte';
+import {encodeArguments, encodeInputData, getAbiFunctions, getHeaderHash} from '../contract/abi-to-byte';
 
 test('getAbiFunctions', async t => {
   const solFile = './src/__test__/RollDice.sol';

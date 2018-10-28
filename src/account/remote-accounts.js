@@ -9,7 +9,7 @@ type Wallet = {
   rawAddress: string,
 };
 
-export type RawTransfer = {
+export type UnsignedTransfer = {
   version: number,
   nonce: number,
   amount: number,
@@ -18,7 +18,6 @@ export type RawTransfer = {
   payload: string,
   isCoinbase: boolean,
   senderPubKey: string,
-  signature: ?string,
   gasLimit: number,
   gasPrice: number,
 }
@@ -32,6 +31,9 @@ export type UnsignedExecution = {
   amount: number,
 };
 
+/**
+ * Accounts contains functions to generate Iotex accounts and sign transactions and data.
+ */
 export class Accounts {
   wallets: { [publicKey: string]: Wallet };
   remoteWallet: Provider;
@@ -39,6 +41,10 @@ export class Accounts {
 
   remote: any; // should be deprecated
 
+  /**
+   * constructor creates an object of Accounts with iotex API remote methods.
+   * @param methods
+   */
   constructor(methods: Methods) {
     this.wallets = {};
     this.methods = methods;
@@ -63,6 +69,10 @@ export class Accounts {
     });
   }
 
+  /**
+   * create generates a wallet and add it to local wallets.
+   * @returns
+   */
   async create(): Promise<Wallet> {
     // $FlowFixMe
     const wallet = await this.remote.generateWallet();
@@ -70,26 +80,48 @@ export class Accounts {
     return wallet;
   }
 
+  /**
+   * privateKeyToAccount gets the whole wallet from private key.
+   * @param privateKey
+   * @returns
+   */
   async privateKeyToAccount(privateKey: string): Promise<Wallet> {
     // $FlowFixMe
     return await this.remote.unlockWallet(privateKey);
   }
 
+  /**
+   * privateKeyToAccount gets the whole wallet from private key and save it to local wallets.
+   * @param privateKey
+   * @returns
+   */
   async add(privateKey: string): Promise<Wallet> {
     const wallet = await this.privateKeyToAccount(privateKey);
     this.wallets[wallet.publicKey] = wallet;
     return wallet;
   }
 
-  async signTransfer(rawTransfer: RawTransfer, wallet: Wallet) {
-    if (!rawTransfer.nonce) {
+  /**
+   * signTransfer signs a transfer with the wallet.
+   * @param unsignedTransfer
+   * @param wallet
+   * @returns
+   */
+  async signTransfer(unsignedTransfer: UnsignedTransfer, wallet: Wallet) {
+    if (!unsignedTransfer.nonce) {
       const details = await this.methods.getAddressDetails(wallet.rawAddress);
-      rawTransfer.nonce = details.pendingNonce;
+      unsignedTransfer.nonce = details.pendingNonce;
     }
 
-    return await this.remote.signTransfer(wallet, rawTransfer);
+    return await this.remote.signTransfer(wallet, unsignedTransfer);
   }
 
+  /**
+   * signSmartContract signs an execution with the wallet.
+   * @param wallet
+   * @param exec
+   * @returns
+   */
   async signSmartContract(wallet: Wallet, exec: UnsignedExecution): any {
     if (!exec.nonce) {
       const details = await this.methods.getAddressDetails(wallet.rawAddress);
