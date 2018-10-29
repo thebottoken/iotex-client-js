@@ -33,6 +33,29 @@ export type UnsignedExecution = {
 
 /**
  * Accounts contains functions to generate Iotex accounts and sign transactions and data.
+ * @example
+ * import {Accounts, HttpProvider} from 'iotex-client-js';
+ * const accounts = new Accounts(new HttpProvider('http://localhost:4004/api/wallet-core/'));
+ * const wallet = await accounts.create();
+ * // => {
+ * //   "publicKey": "...",
+ * //   "privateKey": "...",
+ * //   "rawAddress": "..."
+ * // }
+ *
+ *
+ * const unlockedWallet = await accounts.add('...iotx private key...');
+ * // => {
+ * //   "publicKey": "...",
+ * //   "privateKey": "...",
+ * //   "rawAddress": "..."
+ * // }
+ * accounts.wallets[unlockedWallet.publicKey];
+ * // => {
+ * //   "publicKey": "...",
+ * //   "privateKey": "...",
+ * //   "rawAddress": "..."
+ * // }
  */
 export class Accounts {
   wallets: { [publicKey: string]: Wallet };

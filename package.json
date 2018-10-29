@@ -1,5 +1,5 @@
 {
-  "name": "iotex-client",
+  "name": "iotex-client-js",
   "version": "0.0.6",
   "description": "IoTeX Client",
   "main": "index.js",
@@ -21,7 +21,7 @@
     "build:watch": "babel --watch src/**/*.js -d dist",
     "prepublish": "npm run build",
     "docs": "documentation build src/** -f html -o docs",
-    "docs-md": "documentation build src/** -f md > docs/docs.md",
+    "docs-md": "documentation build src/** -f md > docs/docs.md && documentation build src/methods.js -f md > docs/sdk-methods.md",
     "serve-docs": "documentation serve --watch src/**"
   },
   "nyc": {
