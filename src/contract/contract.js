@@ -2,7 +2,7 @@
 import type {Provider} from '../provider';
 import {Accounts} from '../account/remote-accounts';
 import {RpcMethods} from '../rpc-methods';
-import type {UnsignedExecution} from '../account/remote-accounts';
+import type {TUnsignedExecution} from '../account/remote-accounts';
 import type {TExecution} from '../rpc-methods';
 import {encodeInputData, getAbiFunctions} from './abi-to-byte';
 
@@ -105,7 +105,7 @@ export class Contract {
           isPending: false,
         });
 
-        return await this._iotxMethods.getReceiptByExecutionID(hash);
+        return await this._iotxMethods.getExecutionByID(hash);
       };
     }
   }
@@ -115,7 +115,7 @@ export class Contract {
    * @param exec
    * @returns
    */
-  async deploy(exec: UnsignedExecution): Promise<TExecution> {
+  async deploy(exec: TUnsignedExecution): Promise<TExecution> {
     const signed = await this.accounts.signSmartContract(this.opts.wallet, exec);
     const {hash} = await this._iotxMethods.sendSmartContract({
       ...signed,

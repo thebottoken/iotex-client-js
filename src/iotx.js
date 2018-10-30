@@ -2,7 +2,7 @@
 import type {Provider} from './provider';
 import {RpcMethods} from './rpc-methods';
 import {Accounts} from './account/remote-accounts';
-import type {UnsignedTransfer} from './account/remote-accounts';
+import type {TUnsignedTransfer} from './account/remote-accounts';
 import type {TTransfer} from './rpc-methods';
 import {contractFactory} from './contract/contract';
 
@@ -45,28 +45,64 @@ import {contractFactory} from './contract/contract';
  * });
  *
  *
- * // run smart contracts from solidity file
- * import solc from 'solc';
- * import fs from 'fs';
+ * // compile and deploy a contract
+ * const solidityFileString = `
+ * pragma solidity ^0.4.0;
  *
- * const solFile = `${__dirname}/RollDice.sol`;
- * const contractName = ':RollDice';
- * const input = fs.readFileSync(solFile);
- * const output = solc.compile(input.toString(), 1);
+ * contract SimpleStorage {
+ *    uint storedData;
+ *
+ *    function set(uint x) public {
+ *        storedData = x;
+ *    }
+ *
+ *    function get() public view returns (uint) {
+ *        return storedData;
+ *    }
+ *}
+ * `;
+ * const contractName = ':SimpleStorage';
+ * const output = solc.compile(solidityFileString, 1);
  * const abi = JSON.parse(output.contracts[contractName].interface);
+ * const provider = new HttpProvider('http://localhost:14004/');
  * const iotx = new Iotx(provider);
- * const wallet = await iotx.accounts.add('62d8dd889f14f4058b8926041d095c4230f973fe60c8e54c35e5fb57c3a5596225488101');
- * const contract = new iotx.Contract({
- *    abi,
- *    contractName: ':RollDice',
- *    contractAddress: 'io1qyqsyqcy8zn8qths2qajddca0p0umhtfhgj0uqfgfwzvk0',
- *    gasLimit: 1,
- *    wallet,
- *  });
+ * const wallet = await iotx.accounts.add('c5364b1a2d99d127439be22edfd657889981e9ba4d6d18fe8eca489d48485371efcb2400');
  * const bytecode = output.contracts[contractName].bytecode;
+ * const contract = new iotx.Contract({abi, contractName, wallet});
+ * const exec = await contract.deploy({
+ *    byteCode: bytecode,
+ *    gasLimit: 100000,
+ *    gasPrice: '0',
+ *    version: 1,
+ *    contract: '',
+ *    amount: '1',
+ *  });
  *
- * const deployedHash = await contract.deploy({byteCode: bytecode, gasLimit: 1, gasPrice: '1', version: 1, contract: '', amount: '1'});
- * const calledHash = await contract.rpcMethods.rollAward('id', wallet.rawAddress);
+ * const timeout = time => new Promise(resolve => window.setTimeout(resolve, time));
+ * await timeout(5000);
+ *
+ * const receipt = await iotx.rpcMethods.getReceiptByExecutionID(exec.ID);
+ *
+ * // call methods in the smart contract deployed
+ * await contract
+ * .prepareMethods({
+ *      contractAddress: receipt.contractAddress,
+ *      gasLimit: 100000,
+ *      gasPrice: '0',
+ *      version: 1,
+ *      amount: '0',
+ *    })
+ * .set(666);
+ *
+ * const value = await contract
+ * .prepareMethods({
+ *      contractAddress: receipt.contractAddress,
+ *      gasLimit: 100000,
+ *      gasPrice: '0',
+ *      version: 1,
+ *      amount: '0',
+ *    })
+ * .get();
  */
 export class Iotx {
   provider: Provider;
@@ -90,7 +126,7 @@ export class Iotx {
    * @param transfer: the transfer to be sent.
    * @returns
    */
-  async sendTransfer(transfer: UnsignedTransfer): Promise<TTransfer> {
+  async sendTransfer(transfer: TUnsignedTransfer): Promise<TTransfer> {
     const wallet = this.accounts.wallets[transfer.senderPubKey];
     if (!wallet) {
       throw new Error(`failed to sendTransfer: sender address "${transfer.sender}" is not added to accounts`);

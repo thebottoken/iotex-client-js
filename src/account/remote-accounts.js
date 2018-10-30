@@ -3,13 +3,19 @@ import {HttpProvider} from '../provider';
 import type {Provider} from '../provider';
 import {RpcMethods} from '../rpc-methods';
 
-type Wallet = {
+/**
+ * TWallet type contains the private key, public key, and raw address.
+ */
+type TWallet = {
   privateKey: string,
   publicKey: string,
   rawAddress: string,
 };
 
-export type UnsignedTransfer = {
+/**
+ * TUnsignedTransfer is the type of unsigned transfer to be signed.
+ */
+export type TUnsignedTransfer = {
   version: number,
   nonce: number,
   amount: number,
@@ -22,7 +28,10 @@ export type UnsignedTransfer = {
   gasPrice: string,
 }
 
-export type UnsignedExecution = {
+/**
+ * UnsignedExecution is the type of the unsigned execution to be signed.
+ */
+export type TUnsignedExecution = {
   byteCode: string,
   nonce: ?number,
   gasLimit: number,
@@ -58,7 +67,7 @@ export type UnsignedExecution = {
  * // }
  */
 export class Accounts {
-  wallets: { [publicKey: string]: Wallet };
+  wallets: { [publicKey: string]: TWallet };
   remoteWallet: Provider;
   rpcMethods: RpcMethods;
 
@@ -96,7 +105,7 @@ export class Accounts {
    * create generates a wallet and add it to local wallets.
    * @returns
    */
-  async create(): Promise<Wallet> {
+  async create(): Promise<TWallet> {
     // $FlowFixMe
     const wallet = await this.walletRpcMethods.generateWallet();
     this.wallets[wallet.publicKey] = wallet;
@@ -108,7 +117,7 @@ export class Accounts {
    * @param privateKey
    * @returns
    */
-  async privateKeyToAccount(privateKey: string): Promise<Wallet> {
+  async privateKeyToAccount(privateKey: string): Promise<TWallet> {
     // $FlowFixMe
     return await this.walletRpcMethods.unlockWallet(privateKey);
   }
@@ -118,7 +127,7 @@ export class Accounts {
    * @param privateKey
    * @returns
    */
-  async add(privateKey: string): Promise<Wallet> {
+  async add(privateKey: string): Promise<TWallet> {
     const wallet = await this.privateKeyToAccount(privateKey);
     this.wallets[wallet.publicKey] = wallet;
     return wallet;
@@ -130,7 +139,7 @@ export class Accounts {
    * @param wallet
    * @returns
    */
-  async signTransfer(unsignedTransfer: UnsignedTransfer, wallet: Wallet) {
+  async signTransfer(unsignedTransfer: TUnsignedTransfer, wallet: TWallet) {
     if (!unsignedTransfer.hasOwnProperty('nonce')) {
       const details = await this.rpcMethods.getAddressDetails(wallet.rawAddress);
       unsignedTransfer.nonce = details.pendingNonce;
@@ -145,7 +154,7 @@ export class Accounts {
    * @param exec
    * @returns
    */
-  async signSmartContract(wallet: Wallet, exec: UnsignedExecution): any {
+  async signSmartContract(wallet: TWallet, exec: TUnsignedExecution): any {
     if (!exec.hasOwnProperty('nonce')) {
       const details = await this.rpcMethods.getAddressDetails(wallet.rawAddress);
       exec.nonce = details.pendingNonce;
