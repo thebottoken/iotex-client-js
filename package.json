@@ -1,6 +1,6 @@
 {
   "name": "iotex-client-js",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "IoTeX Client",
   "main": "index.js",
   "files": [
@@ -22,7 +22,10 @@
     "prepublish": "npm run build",
     "docs": "documentation build src/** -f html -o docs",
     "docs-md": "documentation build src/** -f md > docs/docs.md && documentation build src/methods.js -f md > docs/sdk-methods.md",
-    "serve-docs": "documentation serve --watch src/**"
+    "serve-docs": "documentation serve --watch src/**",
+    "changelog-major": "build-changelog --major",
+    "changelog-minor": "build-changelog --minor",
+    "changelog-patch": "build-changelog --patch"
   },
   "nyc": {
     "include": [
@@ -71,6 +74,7 @@
     "babel-plugin-module-resolver": "3.1.1",
     "babel-plugin-react-require": "3.0.0",
     "babel-plugin-transform-class-properties": "6.24.1",
+    "build-changelog": "^2.1.2",
     "documentation": "^8.1.2",
     "eslint": "5.5.0",
     "eslint-plugin-babel": "5.1.0",

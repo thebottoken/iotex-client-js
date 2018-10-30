@@ -1,0 +1,26 @@
+2018-10-29 - 0.0.7 (8fed54e)
+8fed54e (HEAD -> master) refactor methods to rpc methods
+55df8f8 (origin/master, origin/HEAD) add prepareMethods
+b6a465b add more docs
+31b260d add example
+ead85aa add documentation
+6a559c5 (new) update package name
+0fbd805 (origin/new) refactor contract
+aef55d5 finish sendTransfer
+6ba687b refactor iotx
+9844878 add iotx endpoints
+279b4b6 add _readExecutionState
+990f6e1 add raw error handling
+b90841b Revert "use webpack to build"
+d32773b use webpack to build
+727aee1 move fs out of client
+0321d91 bump version
+a428a9e fix test
+9378432 change getLatestNonce to getNextNonce
+89af7ee expose json rpc provider
+2a57963 update version
+3b2c6bd add prepublish
+9851649 clean up before publish
+d00d294 add basic iotex client methods
+
+
