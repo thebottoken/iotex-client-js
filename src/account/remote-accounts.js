@@ -19,7 +19,7 @@ export type UnsignedTransfer = {
   isCoinbase: boolean,
   senderPubKey: string,
   gasLimit: number,
-  gasPrice: number,
+  gasPrice: string,
 }
 
 export type UnsignedExecution = {
@@ -27,8 +27,8 @@ export type UnsignedExecution = {
   nonce: ?number,
   gasLimit: number,
   version: number,
-  contract: string,
-  amount: number,
+  contract: ?string,
+  amount: string,
 };
 
 /**
@@ -131,7 +131,7 @@ export class Accounts {
    * @returns
    */
   async signTransfer(unsignedTransfer: UnsignedTransfer, wallet: Wallet) {
-    if (!unsignedTransfer.nonce) {
+    if (!unsignedTransfer.hasOwnProperty('nonce')) {
       const details = await this.methods.getAddressDetails(wallet.rawAddress);
       unsignedTransfer.nonce = details.pendingNonce;
     }
@@ -146,7 +146,7 @@ export class Accounts {
    * @returns
    */
   async signSmartContract(wallet: Wallet, exec: UnsignedExecution): any {
-    if (!exec.nonce) {
+    if (!exec.hasOwnProperty('nonce')) {
       const details = await this.methods.getAddressDetails(wallet.rawAddress);
       exec.nonce = details.pendingNonce;
     }

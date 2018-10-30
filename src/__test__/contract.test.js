@@ -15,7 +15,7 @@ async function createTestContract(provider) {
   const contract = new iotx.Contract({
     abi,
     contractName: ':RollDice',
-    contractAddress: 'io1qyqsyqcy8zn8qths2qajddca0p0umhtfhgj0uqfgfwzvk0',
+    contractAddress: 'io1qyqsqqqqrusm43yhetcd8jgk4rr3nty5v4aa87yx8l0ech',
     gasLimit: 1,
     wallet,
   });
@@ -39,15 +39,42 @@ test('contract getNextNonce', async t => {
   t.is(nonce, pendingNonce);
 });
 
-test.skip('contract deploy', async t => {
+test('contract deploy', async t => {
   const {contract, bytecode} = await createTestContract(new HttpProvider('http://localhost:14004/'));
-  const hash = await contract.deploy({byteCode: bytecode, gasLimit: 1, gasPrice: '1', version: 1, contract: '', amount: '1'});
-  t.is(hash.length, 64);
+  const exec = await contract.deploy({
+    byteCode: bytecode,
+    gasLimit: 100000,
+    gasPrice: '0',
+    version: 1,
+    contract: '',
+    amount: '1',
+  });
+  t.is(exec.ID.length, 64);
 });
 
-test.skip('contract method call', async t => {
+test.skip('contract method call: non-constant', async t => {
   const {contract, wallet} = await createTestContract(new HttpProvider('http://localhost:14004/'));
-  const hash = await contract.methods.rollAward('id', wallet.rawAddress);
-  t.is(hash.length, 64);
+  const resp = await contract
+    .prepareMethods({
+      gasLimit: 100000,
+      gasPrice: '0',
+      version: 1,
+      amount: '0',
+    })
+    .rollAward('id', wallet.rawAddress);
+  t.is(resp.ID.length, 64);
+});
+
+test.skip('contract method call: constant', async t => {
+  const {contract} = await createTestContract(new HttpProvider('http://localhost:14004/'));
+  const resp = await contract
+    .prepareMethods({
+      gasLimit: 100000,
+      gasPrice: '0',
+      version: 1,
+      amount: '0',
+    })
+    .roll('id');
+  t.is(resp.ID.length, 64);
 });
 

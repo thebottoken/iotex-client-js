@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 import test from 'ava';
 import {Iotx} from '../iotx';
 import {HttpProvider} from '../provider';
@@ -8,7 +9,7 @@ const TEST_WALLET = {
   rawAddress: 'io1qyqsqqqq26zujam2gt5cut0ggu8pa4d5q7hnrvsvace4x6',
 };
 
-test.skip('transfer 1 token from account A to account B', async t => {
+test('transfer 1 token from account A to account B', async t => {
   const iotx = new Iotx(new HttpProvider('http://localhost:14004/'));
   await iotx.accounts.add(TEST_WALLET.privateKey);
   const acctB = await iotx.accounts.create();
@@ -18,7 +19,21 @@ test.skip('transfer 1 token from account A to account B', async t => {
     senderPubKey: TEST_WALLET.publicKey,
     recipient: acctB.rawAddress,
     gasPrice: '1',
-    gasLimit: 1,
+    gasLimit: 10000,
   });
-  t.truthy(receipt.ID.length, 64);
+  t.falsy(receipt.version);
+  t.truthy(receipt.ID);
+  t.truthy(receipt.nonce);
+  t.truthy(receipt.sender);
+  t.truthy(receipt.amount);
+  t.falsy(receipt.senderPubKey);
+  t.falsy(receipt.signature);
+  t.falsy(receipt.payload);
+  t.truthy(receipt.gasLimit);
+  t.truthy(receipt.gasPrice);
+  t.falsy(receipt.isCoinbase);
+  t.falsy(receipt.fee);
+  t.falsy(receipt.timestamp);
+  t.falsy(receipt.blockID);
+  t.true(receipt.isPending);
 });

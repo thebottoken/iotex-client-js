@@ -61,7 +61,7 @@ export type TTransfer = {
 /**
  * TExecution is the type of the execution to be sent to the iotex blockchain.
  */
-type TExecution = {
+export type TExecution = {
   version: number,
   ID: string,
   nonce: number,

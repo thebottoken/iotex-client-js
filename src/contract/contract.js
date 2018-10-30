@@ -1,9 +1,9 @@
 // @flow
-import {get} from 'dotty';
 import type {Provider} from '../provider';
 import {Accounts} from '../account/remote-accounts';
 import {Methods} from '../methods';
 import type {UnsignedExecution} from '../account/remote-accounts';
+import type {TExecution} from '../methods';
 import {encodeInputData, getAbiFunctions} from './abi-to-byte';
 
 /**
@@ -14,7 +14,6 @@ type TContractOpts = {
   abi: any,
   contractAddress: string,
   methods: Methods,
-  gasLimit: number,
   accounts: Accounts,
   wallet: {
     publicKey: string,
@@ -24,23 +23,15 @@ type TContractOpts = {
 };
 
 /**
- * TSignedTransaction is the raw transaction to be signed.
+ * TMethodsOpts are settings to call smart contract methods with.
  */
-type TSignedTransaction = {
-  version: number,
+type TMethodsOpts = {
+  contractAddress: string,
   nonce: number,
-  signature: string,
-  executor: string,
-  contract: string,
-  executorPubKey: string,
-  gas: number,
-  gasPrice: number,
-  data: string,
-  ID: string,
-  amount: number,
-  blockID: string,
-  isPending: boolean,
-  timestamp: number,
+  gasLimit: number,
+  gasPrice: string,
+  version: number,
+  amount: string,
 };
 
 /**
@@ -56,11 +47,12 @@ export class Contract {
   _abiFunctions: any;
   _iotxMethods: Methods;
   accounts: Accounts;
+  methodsOpts: TMethodsOpts;
 
   /**
    * methods are the ABI's methods of the smart contract the user can call.
    */
-  methods: { [funcName: string]: any };
+  methods: { [funcName: string]: Function };
 
   /**
    * constructor creates a new contract instance with all its methods and events defined in its json interface object.
@@ -92,7 +84,6 @@ export class Contract {
         });
 
         const data = encodeInputData(this._abiFunctions, func, userInput);
-        const value = get(args, `${args.length - 1}.value`);
 
         // constant function
         if (this._abiFunctions[func].constant) {
@@ -104,16 +95,17 @@ export class Contract {
         }
 
         // non-constant function
-        const resp = await this._signContractAbi({data, value});
-        if (resp.error) {
-          throw new Error(`cannot signContractAbi: ${JSON.stringify(resp.error)}`);
-        }
+        const resp = await this._signContractBytecode(data);
+        const {hash} = await this._iotxMethods.sendSmartContract({
+          ...resp,
+          // TODO(tian): those fields are strange
+          ID: 'ID',
+          timestamp: 123,
+          blockID: 'blockID',
+          isPending: false,
+        });
 
-        const {error, result} = await this._sendTransaction(resp.result.signedTransaction);
-        if (error) {
-          throw new Error(`cannot sendTransaction: ${JSON.stringify(error)}`);
-        }
-        return result.hash;
+        return await this._iotxMethods.getReceiptByExecutionID(hash);
       };
     }
   }
@@ -123,7 +115,7 @@ export class Contract {
    * @param exec
    * @returns
    */
-  async deploy(exec: UnsignedExecution): any {
+  async deploy(exec: UnsignedExecution): Promise<TExecution> {
     const signed = await this.accounts.signSmartContract(this.opts.wallet, exec);
     const {hash} = await this._iotxMethods.sendSmartContract({
       ...signed,
@@ -137,28 +129,30 @@ export class Contract {
     return await this._iotxMethods.getExecutionByID(hash);
   }
 
-  async _signContractAbi({data, value}: { data: string, value: number }) {
-    const nonce = await this._getNextNonce(this.opts.wallet.rawAddress);
-    const request = {
-      rawTransaction: {
-        byteCode: data || '',
-        nonce: nonce || 0,
-        gasLimit: '1000000',
-        version: 1,
-        amount: value || 0,
-        contract: this.opts.contractAddress,
-      },
-      wallet: this.opts.wallet,
+  /**
+   * prepareMethods prepares calls of smart contract with method options.
+   * @param opts are the settings to call methods with.
+   * @returns {{[funcName: string]: Function}}
+   */
+  prepareMethods(opts: TMethodsOpts) {
+    this.methodsOpts = {
+      ...this.methodsOpts,
+      ...opts,
     };
-    return await this.provider.send({method: 'JsonRpc.signContractAbi', params: [request]});
+    return this.methods;
   }
 
-  async _sendTransaction(transaction: TSignedTransaction) {
-    const request = {
-      signedTransaction: transaction,
-      type: 'contract',
+  async _signContractBytecode(data: string) {
+    const unsigned = {
+      byteCode: data || '',
+      nonce: this.methodsOpts.nonce,
+      gasLimit: this.methodsOpts.gasLimit,
+      gasPrice: this.methodsOpts.gasPrice,
+      version: this.methodsOpts.version,
+      amount: this.methodsOpts.amount || '0',
+      contract: this.opts.contractAddress,
     };
-    return await this.provider.send({method: 'JsonRpc.sendTransaction', params: [request]});
+    return await this.accounts.signSmartContract(this.opts.wallet, unsigned);
   }
 
   async _getNextNonce(address: string) {
@@ -167,27 +161,27 @@ export class Contract {
   }
 
   async _readExecutionState({data}: { data: string }) {
-    const nonce = await this._getNextNonce(this.opts.wallet.rawAddress);
+    if (!this.methodsOpts.hasOwnProperty('nonce')) {
+      this.methodsOpts.nonce = await this._getNextNonce(this.opts.wallet.rawAddress);
+    }
     const request = {
       ID: '',
-      amount: '0',
-      version: 0x1,
-      gasLimit: this.opts.gasLimit,
-      nonce: parseInt(nonce, 10),
       signature: '',
       executor: this.opts.wallet.rawAddress,
-      contract: this.opts.contractAddress,
       executorPubKey: this.opts.wallet.publicKey,
-      gas: 1000000,
-      gasPrice: '0',
       data,
       timestamp: 0,
       blockID: '',
       isPending: false,
+      nonce: this.methodsOpts.nonce,
+      gasLimit: this.methodsOpts.gasLimit,
+      gasPrice: this.methodsOpts.gasPrice,
+      version: this.methodsOpts.version,
+      amount: this.methodsOpts.amount || '0',
+      contract: this.opts.contractAddress,
     };
 
-    const resp = await this._iotxMethods.readExecutionState(request);
-    return resp;
+    return await this._iotxMethods.readExecutionState(request);
   }
 }
 
