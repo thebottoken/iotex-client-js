@@ -140,7 +140,7 @@ export class Accounts {
    * @returns
    */
   async signTransfer(unsignedTransfer: TUnsignedTransfer, wallet: TWallet) {
-    if (!unsignedTransfer.hasOwnProperty('nonce')) {
+    if (!unsignedTransfer.nonce) {
       const details = await this.rpcMethods.getAddressDetails(wallet.rawAddress);
       unsignedTransfer.nonce = details.pendingNonce;
     }
@@ -155,7 +155,7 @@ export class Accounts {
    * @returns
    */
   async signSmartContract(wallet: TWallet, exec: TUnsignedExecution): any {
-    if (!exec.hasOwnProperty('nonce')) {
+    if (!exec.nonce) {
       const details = await this.rpcMethods.getAddressDetails(wallet.rawAddress);
       exec.nonce = details.pendingNonce;
     }

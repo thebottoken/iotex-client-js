@@ -161,7 +161,7 @@ export class Contract {
   }
 
   async _readExecutionState({data}: { data: string }) {
-    if (!this.methodsOpts.hasOwnProperty('nonce')) {
+    if (!this.methodsOpts.nonce) {
       this.methodsOpts.nonce = await this._getNextNonce(this.opts.wallet.rawAddress);
     }
     const request = {
