@@ -1,5 +1,5 @@
 import test from 'ava';
-import {Methods} from '../methods';
+import {RpcMethods} from '../rpc-methods';
 
 const TEST_WALLET = {
   publicKey: '7226a4340c15e7666098247a82b62275d958f65886d59e4190349fa79508c3682d6b8601584bb36629718838856d01cd75993ce8ad8251509ff15ecb219450abc3990f4a32f13200',
@@ -8,12 +8,12 @@ const TEST_WALLET = {
 };
 
 test('getBlockchainHeight', async t => {
-  const methods = new Methods();
+  const methods = new RpcMethods();
   t.truthy(await methods.getBlockchainHeight() > 0);
 });
 
 test('getAddressBalance', async t => {
-  const methods = new Methods();
+  const methods = new RpcMethods();
   try {
     await methods.getAddressBalance(TEST_WALLET.rawAddress);
   } catch (e) {
@@ -22,7 +22,7 @@ test('getAddressBalance', async t => {
 });
 
 test('getTransferByID', async t => {
-  const methods = new Methods(createMockProvider());
+  const methods = new RpcMethods(createMockProvider());
   const receipt = await methods.getTransferByID('f244f2341620a9e3440c2c67b8d0f4d250d53101977e214dbe64a591ae4c93a1');
   t.truthy(receipt.ID.length, 64);
 });

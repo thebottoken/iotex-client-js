@@ -1,9 +1,9 @@
 // @flow
 import type {Provider} from './provider';
-import {Methods} from './methods';
+import {RpcMethods} from './rpc-methods';
 import {Accounts} from './account/remote-accounts';
 import type {UnsignedTransfer} from './account/remote-accounts';
-import type {TTransfer} from './methods';
+import type {TTransfer} from './rpc-methods';
 import {contractFactory} from './contract/contract';
 
 /**
@@ -66,11 +66,11 @@ import {contractFactory} from './contract/contract';
  * const bytecode = output.contracts[contractName].bytecode;
  *
  * const deployedHash = await contract.deploy({byteCode: bytecode, gasLimit: 1, gasPrice: '1', version: 1, contract: '', amount: '1'});
- * const calledHash = await contract.methods.rollAward('id', wallet.rawAddress);
+ * const calledHash = await contract.rpcMethods.rollAward('id', wallet.rawAddress);
  */
 export class Iotx {
   provider: Provider;
-  methods: Methods;
+  rpcMethods: RpcMethods;
   accounts: Accounts;
   Contract: any;
 
@@ -80,9 +80,9 @@ export class Iotx {
    */
   constructor(provider: Provider) {
     this.provider = provider;
-    this.methods = new Methods(provider);
-    this.accounts = new Accounts(this.methods);
-    this.Contract = contractFactory(this.provider, this.accounts, this.methods);
+    this.rpcMethods = new RpcMethods(provider);
+    this.accounts = new Accounts(this.rpcMethods);
+    this.Contract = contractFactory(this.provider, this.accounts, this.rpcMethods);
   }
 
   /**
@@ -108,7 +108,7 @@ export class Iotx {
 
     };
 
-    const {hash} = await this.methods.sendTransfer(adapted);
-    return await this.methods.getTransferByID(hash);
+    const {hash} = await this.rpcMethods.sendTransfer(adapted);
+    return await this.rpcMethods.getTransferByID(hash);
   }
 }

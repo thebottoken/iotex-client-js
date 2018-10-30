@@ -225,14 +225,14 @@ type TSendSmartContractResponse = {
 }
 
 /**
- * Methods are the API remote methods to call iotex blockchain.
+ * RpcMethods are the API remote methods to call iotex blockchain.
  * @example
- * import {Methods, HttpProvider} from 'iotex-client-js';
- * const methods = new Methods(new HttpProvider('http://127.0.0.1:14004'));
+ * import {RpcMethods, HttpProvider} from 'iotex-client-js';
+ * const methods = new RpcMethods(new HttpProvider('http://127.0.0.1:14004'));
  * const height = await methods.getBlockchainHeight();
  * const bal = await methods.getAddressBalance('io1qyqsyqcyae8h2l4w7yr9pw9qdy26rm27jwzrzqtmqqnmt3');
  */
-export class Methods {
+export class RpcMethods {
   provider: Provider;
 
   constructor(provider: Provider) {
@@ -242,7 +242,7 @@ export class Methods {
   async send(method: string, ...args: Array<any>) {
     const resp = await this.provider.send({method: `Explorer.${method}`, params: args});
     if (resp.error) {
-      throw new Error(`failed to Methods.${method}: ${JSON.stringify(resp.error.message)}`);
+      throw new Error(`failed to RpcMethods.${method}: ${JSON.stringify(resp.error.message)}`);
     }
     return resp.result;
   }

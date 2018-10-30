@@ -1,9 +1,9 @@
 // @flow
 import type {Provider} from '../provider';
 import {Accounts} from '../account/remote-accounts';
-import {Methods} from '../methods';
+import {RpcMethods} from '../rpc-methods';
 import type {UnsignedExecution} from '../account/remote-accounts';
-import type {TExecution} from '../methods';
+import type {TExecution} from '../rpc-methods';
 import {encodeInputData, getAbiFunctions} from './abi-to-byte';
 
 /**
@@ -13,7 +13,7 @@ type TContractOpts = {
   provider: Provider,
   abi: any,
   contractAddress: string,
-  methods: Methods,
+  rpcMethods: RpcMethods,
   accounts: Accounts,
   wallet: {
     publicKey: string,
@@ -45,7 +45,7 @@ export class Contract {
   opts: TContractOpts;
   provider: any;
   _abiFunctions: any;
-  _iotxMethods: Methods;
+  _iotxMethods: RpcMethods;
   accounts: Accounts;
   methodsOpts: TMethodsOpts;
 
@@ -62,7 +62,7 @@ export class Contract {
     this.opts = opts;
     this.provider = opts.provider;
     this._abiFunctions = getAbiFunctions(opts.abi);
-    this._iotxMethods = opts.methods;
+    this._iotxMethods = opts.rpcMethods;
     this.accounts = opts.accounts;
 
     // mount methods
@@ -185,10 +185,10 @@ export class Contract {
   }
 }
 
-export function contractFactory(provider: Provider, accounts: Accounts, methods: Methods) {
+export function contractFactory(provider: Provider, accounts: Accounts, rpcMethods: RpcMethods) {
   return class CompositeContract extends Contract {
     constructor(opts: TContractOpts) {
-      super({provider, accounts, methods, ...opts});
+      super({provider, accounts, rpcMethods, ...opts});
     }
   };
 }
