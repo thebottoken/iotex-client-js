@@ -3,6 +3,8 @@ import {HttpProvider} from '../provider';
 import type {Provider} from '../provider';
 import {RpcMethods} from '../rpc-methods';
 
+const DEFAULT_URL = 'http://localhost:4004/api/wallet-core/';
+
 /**
  * TWallet type contains the private key, public key, and raw address.
  */
@@ -68,7 +70,7 @@ export type TUnsignedExecution = {
  */
 export class Accounts {
   wallets: { [publicKey: string]: TWallet };
-  remoteWallet: Provider;
+  walletProvider: Provider;
   rpcMethods: RpcMethods;
 
   walletRpcMethods: any; // should be deprecated
@@ -80,7 +82,7 @@ export class Accounts {
   constructor(rpcMethods: RpcMethods) {
     this.wallets = {};
     this.rpcMethods = rpcMethods;
-    this.remoteWallet = new HttpProvider('http://localhost:4004/api/wallet-core/');
+    this.walletProvider = new HttpProvider(DEFAULT_URL);
 
     this.walletRpcMethods = {};
     [
@@ -92,7 +94,7 @@ export class Accounts {
     ].map(method => {
       // $FlowFixMe
       this.walletRpcMethods[method] = async(...args) => {
-        const resp = await this.remoteWallet.send({method, params: args});
+        const resp = await this.walletProvider.send({method, params: args});
         if (resp.error) {
           throw new Error(`failed to Accounts.${method}: ${JSON.stringify(resp.error)}`);
         }
