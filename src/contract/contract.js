@@ -150,7 +150,7 @@ export class Contract {
       gasPrice: this.methodsOpts.gasPrice,
       version: this.methodsOpts.version,
       amount: this.methodsOpts.amount || '0',
-      contract: this.opts.contractAddress,
+      contract: this.methodsOpts.contractAddress || this.opts.contractAddress,
     };
     return await this.accounts.signSmartContract(this.opts.wallet, unsigned);
   }
@@ -178,7 +178,7 @@ export class Contract {
       gasPrice: this.methodsOpts.gasPrice,
       version: this.methodsOpts.version,
       amount: this.methodsOpts.amount || '0',
-      contract: this.opts.contractAddress,
+      contract: this.methodsOpts.contractAddress || this.opts.contractAddress,
     };
 
     return await this._iotxMethods.readExecutionState(request);

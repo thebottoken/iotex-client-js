@@ -31,7 +31,7 @@ async function createTestContract(provider, privateKey) {
   const contract = new iotx.Contract({
     abi,
     contractName,
-    contractAddress: 'io1qyqsqqqqpqcq0s2x4lcmyguerwzffplq3jmtzauj3ffx6r',
+    contractAddress: 'io1qyqsqqqqveknqn3lw8x0mad5va70nhp8kfdpajgev4sv3x',
     wallet,
   });
   const bytecode = output.contracts[contractName].bytecode;
