@@ -7,7 +7,7 @@ import type {Provider} from './provider';
  */
 type TCoinStatistic = {
   height: number,
-  supply: number,
+  supply: string,
   transfers: number,
   votes: number,
   executions: number,
@@ -33,7 +33,7 @@ type TBlock = {
   votes: number,
   executions: number,
   generateBy: TBlockGenerator,
-  amount: number,
+  amount: string,
   forged: number,
   size: number,
 }
@@ -47,11 +47,13 @@ export type TTransfer = {
   nonce: number,
   sender: string,
   recipient: string,
-  amount: number,
+  amount: string,
   senderPubKey: string,
   payload: string,
+  gasLimit: number,
+  gasPrice: string,
   isCoinbase: boolean,
-  fee: number,
+  fee: string,
   timestamp: number,
   blockID: string,
   isPending: boolean,
@@ -114,6 +116,8 @@ type TVote = {
   voter: string,
   votee: string,
   voterPubKey: string,
+  gasLimit: number,
+  gasPrice: string,
   signature: string,
   blockID: string,
   isPending: boolean,
@@ -124,7 +128,7 @@ type TVote = {
  */
 type TAddressDetails = {
   address: string,
-  totalBalance: number,
+  totalBalance: string,
   nonce: number,
   pendingNonce: number,
   isCandidate: boolean,
@@ -135,7 +139,8 @@ type TAddressDetails = {
  */
 type TCandidate = {
   address: string,
-  totalVote: number,
+  pubKey: string,
+  totalVote: string,
   creationHeight: number,
   lastUpdateHeight: number,
   isDelegate: boolean,
@@ -169,10 +174,12 @@ type TSendTransferRequest = {
   nonce: number,
   sender: string,
   recipient: string,
-  amount: number,
+  amount: string,
   senderPubKey: string,
   signature: string,
   payload: string,
+  gasLimit: number,
+  gasPrice: string,
   isCoinbase: boolean,
 }
 
@@ -192,6 +199,8 @@ type TSendVoteRequest = {
   voter: string,
   votee: string,
   voterPubKey: string,
+  gasLimit: number,
+  gasPrice: string,
   signature: string,
 }
 
@@ -200,6 +209,51 @@ type TSendVoteRequest = {
  */
 type TSendVoteResponse = {
   hash: string,
+}
+
+/**
+ * TPutSubChainBlockMerkelRoot puts a sub chain Merkle root.
+ */
+type TPutSubChainBlockMerkelRoot = {
+  name: string,
+  value: string,
+}
+
+/**
+ * TPutSubChainBlockRequest is the request made to put sub chain block.
+ */
+type TPutSubChainBlockRequest = {
+  version: number,
+  nonce: number,
+  senderAddress: string,
+  subChainAddress: string,
+  height: number,
+  roots: Array<TPutSubChainBlockMerkelRoot>,
+  senderPubKey: string,
+  signature: string,
+  gasLimit: number,
+  gasPrice: string,
+}
+
+/**
+ * TPutSubChainBlockResponse is the response of putting sub chain block.
+ */
+type TPutSubChainBlockResponse = {
+  hash: string,
+}
+
+/**
+ * TSendActionRequest is the request made to send an action.
+ */
+type TSendActionRequest = {
+  payload: string,
+}
+
+/**
+ * TSendActionResponse is the response of sending an action.
+ */
+type TSendActionResponse = {
+  payload: string,
 }
 
 /**
@@ -221,6 +275,70 @@ type TGetPeersResponse = {
  * TSendSmartContractResponse is the type of the response of sendSmartContract.
  */
 type TSendSmartContractResponse = {
+  hash: string,
+}
+
+/**
+ * TGetBlkOrActResponse is the response of getting a block or an action.
+ */
+type TGetBlkOrActResponse = {
+  block: ?TBlock,
+  transfer: ?TTransfer,
+  vote: ?TVote,
+  execution: ?TExecution,
+}
+
+/**
+ * TCreateDepositRequest is the request to create deposit.
+ */
+type TCreateDepositRequest = {
+  version: number,
+  nonce: number,
+  sender: string,
+  senderPubKey: string,
+  recipient: string,
+  amount: string,
+  signature: string,
+  gasLimit: number,
+  gasPrice: string,
+}
+
+/**
+ * TCreateDepositResponse is the response to create deposit.
+ */
+type TCreateDepositResponse = {
+  hash: string,
+}
+
+/**
+ * TDeposit is the type of deposit.
+ */
+type TDeposit = {
+  amount: string,
+  address: string,
+  confirmed: boolean,
+}
+
+/**
+ * TSettleDepositRequest is the request to settle deposit.
+ */
+type TSettleDepositRequest = {
+  version: number,
+  nonce: number,
+  sender: string,
+  senderPubKey: string,
+  recipient: string,
+  amount: string,
+  index: number,
+  signature: string,
+  gasLimit: number,
+  gasPrice: string,
+}
+
+/**
+ * TSettleDepositResponse is the response of settling deposit.
+ */
+type TSettleDepositResponse = {
   hash: string,
 }
 
@@ -257,7 +375,7 @@ export class RpcMethods {
   /**
    * get the balance of an address
    */
-  async getAddressBalance(address: string): Promise<number> {
+  async getAddressBalance(address: string): Promise<string> {
     return await this.send(this.getAddressBalance.name, address);
   }
 
@@ -409,6 +527,13 @@ export class RpcMethods {
   }
 
   /**
+   * getCandidateMetricsByHeight gets candidates metrics at given height
+   */
+  async getCandidateMetricsByHeight(h: number): Promise<TCandidateMetrics> {
+    return await this.send(this.getCandidateMetricsByHeight.name, h);
+  }
+
+  /**
    * send transfer
    */
   async sendTransfer(request: TSendTransferRequest): Promise<TSendTransferResponse> {
@@ -430,6 +555,20 @@ export class RpcMethods {
   }
 
   /**
+   * putSubChainBlock puts a subchain block.
+   */
+  async putSubChainBlock(request: TPutSubChainBlockRequest): Promise<TPutSubChainBlockResponse> {
+    return await this.send(this.putSubChainBlock.name, request);
+  }
+
+  /**
+   * sendAction sends an action.
+   */
+  async sendAction(request: TSendActionRequest): Promise<TSendActionResponse> {
+    return await this.send(this.sendAction.name, request);
+  }
+
+  /**
    * get list of peers
    */
   async getPeers(): Promise<TGetPeersResponse> {
@@ -448,5 +587,33 @@ export class RpcMethods {
    */
   async readExecutionState(request: TExecution): Promise<string> {
     return await this.send(this.readExecutionState.name, request);
+  }
+
+  /**
+   * get block or action by a hash
+   */
+  async getBlockOrActionByHash(hashStr: string): Promise<TGetBlkOrActResponse> {
+    return await this.send(this.getBlockOrActionByHash.name, hashStr);
+  }
+
+  /**
+   * deposit balance from main-chain to sub-chain
+   */
+  async createDeposit(request: TCreateDepositRequest): Promise<TCreateDepositResponse> {
+    return await this.send(this.createDeposit.name, request);
+  }
+
+  /**
+   * get deposits on a sub-chain
+   */
+  async getDeposits(subChainID: number, offset: number, limit: number): Promise<Array<TDeposit>> {
+    return await this.send(this.getDeposits.name, subChainID, offset, limit);
+  }
+
+  /**
+   * settle deposit on sub-chain. This is a sub-chain API
+   */
+  async settleDeposit(request: TSettleDepositRequest): Promise<TSettleDepositResponse> {
+    return await this.send(this.settleDeposit.name, request);
   }
 }
