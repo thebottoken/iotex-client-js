@@ -152,11 +152,11 @@ export class Accounts {
 
   /**
    * signSmartContract signs an execution with the wallet.
-   * @param wallet
    * @param exec
+   * @param wallet
    * @returns
    */
-  async signSmartContract(wallet: TWallet, exec: TUnsignedExecution): any {
+  async signSmartContract(exec: TUnsignedExecution, wallet: TWallet): any {
     if (!exec.nonce) {
       const details = await this.rpcMethods.getAddressDetails(wallet.rawAddress);
       exec.nonce = details.pendingNonce;

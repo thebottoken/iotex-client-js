@@ -116,7 +116,7 @@ export class Contract {
    * @returns
    */
   async deploy(exec: TUnsignedExecution): Promise<TExecution> {
-    const signed = await this.accounts.signSmartContract(this.opts.wallet, exec);
+    const signed = await this.accounts.signSmartContract(exec, this.opts.wallet);
     const {hash} = await this._iotxMethods.sendSmartContract({
       ...signed,
       // TODO(tian): those fields are strange
@@ -152,7 +152,7 @@ export class Contract {
       amount: this.methodsOpts.amount || '0',
       contract: this.methodsOpts.contractAddress || this.opts.contractAddress,
     };
-    return await this.accounts.signSmartContract(this.opts.wallet, unsigned);
+    return await this.accounts.signSmartContract(unsigned, this.opts.wallet);
   }
 
   async _getNextNonce(address: string) {
