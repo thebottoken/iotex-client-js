@@ -1,6 +1,7 @@
 // @flow
 
 import bech32 from 'bech32';
+import {Buffer} from 'global';
 
 // eslint-disable-next-line max-statements,complexity
 function convertBits(words, fromBits, toBits) {
@@ -45,23 +46,33 @@ function toHex(i) {
   return hi;
 }
 
-export function decodeAddress(address: string): {address: string, error: any} {
+export function decodeAddress(address: string): {address: string, error: any, chainId: number} {
   try {
     const {prefix, words} = bech32.decode(address);
     if (prefix !== 'io' && prefix !== 'it') {
-      return {address: '', error: null};
+      return {address: '', error: null, chainId: 1};
     }
     const data = convertBits(words, 5, 8);
     if (data === null) {
-      return {address: '', error: null};
+      return {address: '', error: null, chainId: 1};
     }
     let retval = '';
     for (const i of data) {
       retval += toHex(i);
     }
-    return {address: retval, error: null};
+    return {
+      address: retval,
+      error: null,
+      chainId: chainIdFromWords(words),
+    };
   } catch (error) {
     // TODO: handle error
-    return {address: '', error};
+    return {address: '', error, chainId: 1};
   }
+}
+
+export function chainIdFromWords(words: Array<number>) {
+  const data = bech32.fromWords(words);
+  const chainIdPack = data.slice(1, 5);
+  return new Buffer(chainIdPack).readUInt32LE(0);
 }

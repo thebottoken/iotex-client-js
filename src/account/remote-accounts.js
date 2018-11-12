@@ -43,6 +43,37 @@ export type TUnsignedExecution = {
 };
 
 /**
+ * TCreateDeposit is the type of the request to create deposit.
+ */
+export type TCreateDeposit = {
+  nonce: number,
+  signature: string,
+  amount: string,
+  sender: string,
+  recipient: string,
+  gasLimit: number,
+  gasPrice: string,
+  version: number,
+  senderPubKey: string,
+}
+
+/**
+ * TSettleDeposit is the type of the request to settle deposit.
+ */
+export type TSettleDeposit = {
+  nonce: number,
+  signature: string,
+  amount: string,
+  index: number,
+  sender: string,
+  recipient: string,
+  gasLimit: number,
+  gasPrice: string,
+  version: number,
+  senderPubKey: string,
+}
+
+/**
  * Accounts contains functions to generate Iotex accounts and sign transactions and data.
  * @example
  * import {Accounts, HttpProvider} from 'iotex-client-js';
@@ -72,16 +103,19 @@ export class Accounts {
   wallets: { [publicKey: string]: TWallet };
   walletProvider: Provider;
   rpcMethods: RpcMethods;
+  chainId: number;
 
   walletRpcMethods: any; // should be deprecated
 
   /**
    * constructor creates an object of Accounts with iotex API remote methods.
-   * @param rpcMethods
+   * @param rpcMethods is the rpc methods this module is depending on to communicate with the blockchain instance.
+   * @param chainId is the optional param to specify what the chain id those accounts are associated with.
    */
-  constructor(rpcMethods: RpcMethods) {
+  constructor(rpcMethods: RpcMethods, chainId: ?number) {
     this.wallets = {};
     this.rpcMethods = rpcMethods;
+    this.chainId = chainId || 1;
     this.walletProvider = new HttpProvider(DEFAULT_URL);
 
     this.walletRpcMethods = {};
@@ -91,6 +125,8 @@ export class Accounts {
       'signTransfer',
       'signVote',
       'signSmartContract',
+      'signCreateDeposit',
+      'signSettleDeposit',
     ].map(method => {
       // $FlowFixMe
       this.walletRpcMethods[method] = async(...args) => {
@@ -109,7 +145,7 @@ export class Accounts {
    */
   async create(): Promise<TWallet> {
     // $FlowFixMe
-    const wallet = await this.walletRpcMethods.generateWallet();
+    const wallet = await this.walletRpcMethods.generateWallet(this.chainId);
     this.wallets[wallet.publicKey] = wallet;
     return wallet;
   }
@@ -121,7 +157,7 @@ export class Accounts {
    */
   async privateKeyToAccount(privateKey: string): Promise<TWallet> {
     // $FlowFixMe
-    return await this.walletRpcMethods.unlockWallet(privateKey);
+    return await this.walletRpcMethods.unlockWallet(privateKey, this.chainId);
   }
 
   /**
@@ -163,6 +199,38 @@ export class Accounts {
     }
 
     return await this.walletRpcMethods.signSmartContract(wallet, exec);
+  }
+
+  /**
+   * signSettleDeposit signs an settle deposit action.
+   * @param settleDeposit
+   * @param wallet
+   * @returns
+   */
+  async signSettleDeposit(settleDeposit: TSettleDeposit, wallet: TWallet): Promise<TSettleDeposit> {
+    if (!settleDeposit.nonce) {
+      const details = await this.rpcMethods.getAddressDetails(wallet.rawAddress);
+      settleDeposit.nonce = details.pendingNonce;
+    }
+
+    const resp = await this.walletRpcMethods.signSettleDeposit({settleDeposit, address: wallet});
+    return resp && resp.settleDeposit;
+  }
+
+  /**
+   * signCreateDeposit signs an create deposit action.
+   * @param createDeposit
+   * @param wallet
+   * @returns
+   */
+  async signCreateDeposit(createDeposit: TCreateDeposit, wallet: TWallet): Promise<TCreateDeposit> {
+    if (!createDeposit.nonce) {
+      const details = await this.rpcMethods.getAddressDetails(wallet.rawAddress);
+      createDeposit.nonce = details.pendingNonce;
+    }
+
+    const resp = await this.walletRpcMethods.signCreateDeposit({createDeposit, address: wallet});
+    return resp && resp.createDeposit;
   }
 }
 

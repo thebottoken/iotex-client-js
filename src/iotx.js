@@ -7,6 +7,13 @@ import type {TTransfer} from './rpc-methods';
 import {contractFactory} from './contract/contract';
 
 /**
+ * IotxOpts is the type of Iotx settings.
+ */
+type IotxOpts = {
+  chainId: number,
+}
+
+/**
  * Iotx is the client to interact with iotex-core and iotex-wallet.
  * @example
  * import {Iotx, HttpProvider} from 'iotex-client-js';
@@ -109,15 +116,18 @@ export class Iotx {
   rpcMethods: RpcMethods;
   accounts: Accounts;
   Contract: any;
+  opts: IotxOpts;
 
   /**
    * Iotx constructor creates an instance.
    * @param provider is the network provider/endpoint this client will interact with.
+   * @param opts are the optional configurations of the Iotx object. default value is `{chainId: 1}`.
    */
-  constructor(provider: Provider) {
+  constructor(provider: Provider, opts: ?IotxOpts) {
     this.provider = provider;
+    this.opts = opts || {chainId: 1};
     this.rpcMethods = new RpcMethods(provider);
-    this.accounts = new Accounts(this.rpcMethods);
+    this.accounts = new Accounts(this.rpcMethods, this.opts.chainId);
     this.Contract = contractFactory(this.provider, this.accounts, this.rpcMethods);
   }
 
