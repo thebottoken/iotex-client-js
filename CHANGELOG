@@ -1,3 +1,14 @@
+2018-11-11 - 0.1.0 (5d08464)
+5d08464 (HEAD -> master, origin/master, origin/HEAD) add cross chain createDeposit and settleDeposit
+950577d switch param order in signSmartContract
+53bd68b add more rpc methods
+db9509b update contract address
+7895e1b update test private keys
+e4f021e update nonce handling
+e128ab3 update docs
+e13b2dd (tag: v0.0.7) 0.0.7
+
+
 2018-10-29 - 0.0.7 (8fed54e)
 8fed54e (HEAD -> master) refactor methods to rpc methods
 55df8f8 (origin/master, origin/HEAD) add prepareMethods
