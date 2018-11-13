@@ -1,3 +1,9 @@
+2018-11-13 - 0.1.2 (f2b35e8)
+f2b35e8 (HEAD -> master) Merge branch 'master' of github.com:iotexproject/iotex-client-js
+49d8564 (tag: v0.1.1) 0.1.1
+03bda36 util function fromRau
+
+
 2018-11-13 - 0.1.1 (6c51fec)
 6c51fec (HEAD -> master, origin/master, origin/HEAD) remove buffer deps
 80b6183 0.1.0
