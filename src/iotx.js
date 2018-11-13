@@ -7,10 +7,12 @@ import type {TTransfer} from './rpc-methods';
 import {contractFactory} from './contract/contract';
 
 /**
- * IotxOpts is the type of Iotx settings.
+ * IotxOpts is the type of Iotx settings. walletProvider is to be deprecated when local implementation is ready in
+ * future versions.
  */
 type IotxOpts = {
-  chainId: number,
+  chainId?: number,
+  walletProvider?: Provider,
 }
 
 /**
@@ -127,7 +129,7 @@ export class Iotx {
     this.provider = provider;
     this.opts = opts || {chainId: 1};
     this.rpcMethods = new RpcMethods(provider);
-    this.accounts = new Accounts(this.rpcMethods, this.opts.chainId);
+    this.accounts = new Accounts(this.rpcMethods, this.opts.chainId, opts && opts.walletProvider);
     this.Contract = contractFactory(this.provider, this.accounts, this.rpcMethods);
   }
 

@@ -111,12 +111,13 @@ export class Accounts {
    * constructor creates an object of Accounts with iotex API remote methods.
    * @param rpcMethods is the rpc methods this module is depending on to communicate with the blockchain instance.
    * @param chainId is the optional param to specify what the chain id those accounts are associated with.
+   * @param walletProvider is the remote wallet provider.
    */
-  constructor(rpcMethods: RpcMethods, chainId: ?number) {
+  constructor(rpcMethods: RpcMethods, chainId: ?number, walletProvider: ?Provider) {
     this.wallets = {};
     this.rpcMethods = rpcMethods;
     this.chainId = chainId || 1;
-    this.walletProvider = new HttpProvider(DEFAULT_URL);
+    this.walletProvider = walletProvider || new HttpProvider(DEFAULT_URL);
 
     this.walletRpcMethods = {};
     [

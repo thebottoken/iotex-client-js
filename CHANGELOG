@@ -1,6 +1,6 @@
-2018-11-13 - 0.1.1 (03bda36)
-03bda36 (HEAD -> master) util function fromRau
-80b6183 (origin/master, origin/HEAD) 0.1.0
+2018-11-13 - 0.1.1 (6c51fec)
+6c51fec (HEAD -> master, origin/master, origin/HEAD) remove buffer deps
+80b6183 0.1.0
 
 
 2018-11-11 - 0.1.0 (5d08464)

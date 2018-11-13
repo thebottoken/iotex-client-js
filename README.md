@@ -12,4 +12,7 @@ npm run build
 
 # publish
 npm publish
+
+# bump version
+npm run changelog-patch
 ```

@@ -10,7 +10,15 @@ test('decodeAddress', async t => {
 });
 
 test('getChainId', async t => {
-  const {words} = bech32.decode('io1qyqsqqqq4gyvckxj2mjnf58fdykwelzvxeq6xahnlc3zdz');
-  const chainId = chainIdFromWords(words);
-  t.deepEqual(chainId, 1);
+  [{
+    address: 'io1qyqsqqqq4gyvckxj2mjnf58fdykwelzvxeq6xahnlc3zdz',
+    expectedChainId: 1,
+  }, {
+    address: 'io1qypqqqqqnruv7fnc0tdtuna5pgy367ad0zn65yp3ymhle7',
+    expectedChainId: 2,
+  }].map(tt => {
+    const {words} = bech32.decode(tt.address);
+    const chainId = chainIdFromWords(words);
+    t.deepEqual(chainId, tt.expectedChainId);
+  });
 });

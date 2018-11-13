@@ -1,7 +1,6 @@
 // @flow
 
 import bech32 from 'bech32';
-import {Buffer} from 'global';
 
 // eslint-disable-next-line max-statements,complexity
 function convertBits(words, fromBits, toBits) {
@@ -41,7 +40,7 @@ function convertBits(words, fromBits, toBits) {
 function toHex(i) {
   const hi = Number(i).toString(16);
   if (hi.length < 2) {
-    return `0${ hi}`;
+    return `0${hi}`;
   }
   return hi;
 }
@@ -74,5 +73,6 @@ export function decodeAddress(address: string): {address: string, error: any, ch
 export function chainIdFromWords(words: Array<number>) {
   const data = bech32.fromWords(words);
   const chainIdPack = data.slice(1, 5);
-  return new Buffer(chainIdPack).readUInt32LE(0);
+  const hex = `0x${chainIdPack.reverse().map(num => toHex(num)).join('')}`;
+  return parseInt(hex, 16);
 }
