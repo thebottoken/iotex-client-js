@@ -9,21 +9,35 @@ import {BigNumber} from 'bignumber.js';
  * @returns number of unit
  */
 export function fromRau(rau: string, unit: string): string {
-  const rauBN = new BigNumber(rau);
+  return convert(rau, unit, 'div');
+}
+
+/**
+ * toRau is a function to convert various units to Rau.
+ * @param num is the number of unit
+ * @param unit is the unit to convert to Rau.
+ * @returns number of Rau
+ */
+export function toRau(num: string, unit: string) {
+  return convert(num, unit, 'multipliedBy');
+}
+
+function convert(num: string, unit: string, operator: string) {
+  const rauBN = new BigNumber(num);
   switch (unit) {
   case 'Rau':
-    return rau;
+    return num;
   case 'KRau':
-    return rauBN.div(new BigNumber('1000')).toString();
+    return rauBN[operator](new BigNumber('1000')).toString();
   case 'MRau':
-    return rauBN.div(new BigNumber('1000000')).toString();
+    return rauBN[operator](new BigNumber('1000000')).toString();
   case 'GRau':
-    return rauBN.div(new BigNumber('1000000000')).toString();
+    return rauBN[operator](new BigNumber('1000000000')).toString();
   case 'Qev':
-    return rauBN.div(new BigNumber('1000000000000')).toString();
+    return rauBN[operator](new BigNumber('1000000000000')).toString();
   case 'Jing':
-    return rauBN.div(new BigNumber('1000000000000000')).toString();
+    return rauBN[operator](new BigNumber('1000000000000000')).toString();
   default:
-    return rauBN.div(new BigNumber('1000000000000000000')).toString();
+    return rauBN[operator](new BigNumber('1000000000000000000')).toString();
   }
 }

@@ -1,6 +1,6 @@
 
 import test from 'ava';
-import {fromRau} from '../utils';
+import {fromRau, toRau} from '../utils';
 
 test('fromRau', async t => {
   const rau = '2002000000000000000';
@@ -11,4 +11,15 @@ test('fromRau', async t => {
   t.true(fromRau(rau, 'Qev') === '2002000');
   t.true(fromRau(rau, 'Jing') === '2002');
   t.true(fromRau(rau, 'Iotx') === '2.002');
+});
+
+test('toRau', async t => {
+  const rau = '2002000000000000000';
+  t.is(toRau('2002000000000000000', 'Rau'), rau);
+  t.is(toRau('2002000000000000', 'KRau'), rau);
+  t.is(toRau('2002000000000', 'MRau'), rau);
+  t.is(toRau('2002000000', 'GRau'), rau);
+  t.is(toRau('2002000', 'Qev'), rau);
+  t.is(toRau('2002', 'Jing'), rau);
+  t.is(toRau('2.002', 'Iotx'), rau);
 });
