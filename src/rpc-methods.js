@@ -343,6 +343,47 @@ type TSettleDepositResponse = {
 }
 
 /**
+ * TCreateDeposit is the type of the created deposit information.
+ */
+type TCreateDeposit = {
+  version: number,
+  ID: string,
+  nonce: number,
+  sender: string,
+  recipient: string,
+  amount: string,
+  senderPubKey: string,
+  signature: string,
+  gasLimit: number,
+  gasPrice: string,
+  fee: string,
+  timestamp: number,
+  blockID: string,
+  isPending: boolean,
+};
+
+/**
+ * TSettleDeposit is the type of the settled deposit information.
+ */
+type TSettleDeposit = {
+  version: number,
+  ID: string,
+  nonce: number,
+  sender: string,
+  recipient: string,
+  amount: string,
+  index: number,
+  senderPubKey: string,
+  signature: string,
+  gasLimit: number,
+  gasPrice: string,
+  fee: string,
+  timestamp: number,
+  blockID: string,
+  isPending: boolean,
+};
+
+/**
  * RpcMethods are the API remote methods to call iotex blockchain.
  * @example
  * import {RpcMethods, HttpProvider} from 'iotex-client-js';
@@ -492,6 +533,34 @@ export class RpcMethods {
   }
 
   /**
+   * get create deposit from id
+   */
+  async getCreateDeposit(createDepositID: string): Promise<TCreateDeposit> {
+    return await this.send(this.getCreateDeposit.name, createDepositID);
+  }
+
+  /**
+   * get list of create deposits belonging to an address
+   */
+  async getCreateDepositsByAddress(address: string, offset: number, limit: number): Promise<Array<TCreateDeposit>> {
+    return await this.send(this.getCreateDepositsByAddress.name, address, offset, limit);
+  }
+
+  /**
+   * get settle deposit from id
+   */
+  async getSettleDeposit(settleDepositID: string): Promise<TSettleDeposit> {
+    return await this.send(this.getSettleDeposit.name, settleDepositID);
+  }
+
+  /**
+   * get list of settle deposits belonging to an address
+   */
+  async getSettleDepositsByAddress(address: string, offset: number, limit: number): Promise<Array<TSettleDeposit>> {
+    return await this.send(this.getSettleDepositsByAddress.name, address, offset, limit);
+  }
+
+  /**
    * get list of blocks by block id offset and limit
    */
   async getLastBlocksByRange(offset: number, limit: number): Promise<Array<TBlock>> {
@@ -615,5 +684,33 @@ export class RpcMethods {
    */
   async settleDeposit(request: TSettleDepositRequest): Promise<TSettleDepositResponse> {
     return await this.send(this.settleDeposit.name, request);
+  }
+
+  /**
+   * suggest gas price
+   */
+  async suggestGasPrice(): Promise<number> {
+    return await this.send(this.suggestGasPrice.name);
+  }
+
+  /**
+   * estimate gas for transfer
+   */
+  async estimateGasForTransfer(request: TSendTransferRequest): Promise<number> {
+    return await this.send(this.estimateGasForTransfer.name, request);
+  }
+
+  /**
+   * estimate gas for vote
+   */
+  async estimateGasForVote(): Promise<number> {
+    return await this.send(this.estimateGasForVote.name);
+  }
+
+  /**
+   * estimate gas for smart contract
+   */
+  async estimateGasForSmartContract(request: TExecution): Promise<number> {
+    return await this.send(this.estimateGasForSmartContract.name, request);
   }
 }
