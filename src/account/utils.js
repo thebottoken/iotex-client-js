@@ -1,6 +1,6 @@
 // @flow
 
-import {BN} from 'bn.js';
+import {BigNumber} from 'bignumber.js';
 
 /**
  * fromRau is a function to convert Rau to Iotx.
@@ -9,21 +9,21 @@ import {BN} from 'bn.js';
  * @returns number of unit
  */
 export function fromRau(rau: string, unit: string): string {
-  const rauBN = new BN(rau);
+  const rauBN = new BigNumber(rau);
   switch (unit) {
   case 'Rau':
     return rau;
   case 'KRau':
-    return rauBN.div(new BN('1000')).toString();
+    return rauBN.div(new BigNumber('1000')).toString();
   case 'MRau':
-    return rauBN.div(new BN('1000000')).toString();
+    return rauBN.div(new BigNumber('1000000')).toString();
   case 'GRau':
-    return rauBN.div(new BN('1000000000')).toString();
+    return rauBN.div(new BigNumber('1000000000')).toString();
   case 'Qev':
-    return rauBN.div(new BN('1000000000000')).toString();
+    return rauBN.div(new BigNumber('1000000000000')).toString();
   case 'Jing':
-    return rauBN.div(new BN('1000000000000000')).toString();
+    return rauBN.div(new BigNumber('1000000000000000')).toString();
   default:
-    return rauBN.div(new BN('1000000000000000000')).toString();
+    return rauBN.div(new BigNumber('1000000000000000000')).toString();
   }
 }
