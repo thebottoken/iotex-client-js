@@ -1,0 +1,130 @@
+[
+  {
+    "request": {
+      "method": "unlockWallet",
+      "params": [
+        "685ca0b7276cff60fc9bb378e79bb785f8421aa766bb4f0069d99f8505f009d5210cb401",
+        1
+      ],
+      "jsonrpc": "2.0",
+      "id": "0"
+    },
+    "response": {
+      "id": "0",
+      "jsonrpc": "2.0",
+      "result": {
+        "publicKey": "1fc5aec4197bdff4106cff9fe8c2052db51fbb6ed2b35e4ffe0c8ad4d9211c8583f88b0632e790f79431a7ab47e364f05d87aad37644639fb35a99cc26d497eff1e278a39ea5e300",
+        "privateKey": "685ca0b7276cff60fc9bb378e79bb785f8421aa766bb4f0069d99f8505f009d5210cb401",
+        "rawAddress": "io1qyqsqqqqsqw4v9z953m8dsn9epfmf0cwelwcwzvgje7a2g"
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "unlockWallet",
+      "params": [
+        "685ca0b7276cff60fc9bb378e79bb785f8421aa766bb4f0069d99f8505f009d5210cb401",
+        2
+      ],
+      "jsonrpc": "2.0",
+      "id": "1"
+    },
+    "response": {
+      "id": "1",
+      "jsonrpc": "2.0",
+      "result": {
+        "publicKey": "1fc5aec4197bdff4106cff9fe8c2052db51fbb6ed2b35e4ffe0c8ad4d9211c8583f88b0632e790f79431a7ab47e364f05d87aad37644639fb35a99cc26d497eff1e278a39ea5e300",
+        "privateKey": "685ca0b7276cff60fc9bb378e79bb785f8421aa766bb4f0069d99f8505f009d5210cb401",
+        "rawAddress": "io1qypqqqqqsqw4v9z953m8dsn9epfmf0cwelwcwzvg0prv53"
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "signCreateDeposit",
+      "params": [
+        {
+          "createDeposit": {
+            "amount": "1",
+            "sender": "io1qyqsqqqqsqw4v9z953m8dsn9epfmf0cwelwcwzvgje7a2g",
+            "recipient": "io1qypqqqqqsqw4v9z953m8dsn9epfmf0cwelwcwzvg0prv53",
+            "gasLimit": 1000000,
+            "gasPrice": "0",
+            "version": 1,
+            "senderPubKey": "1fc5aec4197bdff4106cff9fe8c2052db51fbb6ed2b35e4ffe0c8ad4d9211c8583f88b0632e790f79431a7ab47e364f05d87aad37644639fb35a99cc26d497eff1e278a39ea5e300",
+            "nonce": 14
+          },
+          "address": {
+            "publicKey": "1fc5aec4197bdff4106cff9fe8c2052db51fbb6ed2b35e4ffe0c8ad4d9211c8583f88b0632e790f79431a7ab47e364f05d87aad37644639fb35a99cc26d497eff1e278a39ea5e300",
+            "privateKey": "685ca0b7276cff60fc9bb378e79bb785f8421aa766bb4f0069d99f8505f009d5210cb401",
+            "rawAddress": "io1qyqsqqqqsqw4v9z953m8dsn9epfmf0cwelwcwzvgje7a2g"
+          }
+        }
+      ],
+      "jsonrpc": "2.0",
+      "id": "2"
+    },
+    "response": {
+      "id": "2",
+      "jsonrpc": "2.0",
+      "result": {
+        "createDeposit": {
+          "nonce": 14,
+          "signature": "2642d0c441361f3d452ac3106f136442abe0871cc8928ce1aea28f75a5f079ee2d6b49018a7bebff257da1764ea700322c3a4a9254423d8880e7195cb8c26cb64d0d94078bca9b00",
+          "amount": "1",
+          "sender": "io1qyqsqqqqsqw4v9z953m8dsn9epfmf0cwelwcwzvgje7a2g",
+          "recipient": "io1qypqqqqqsqw4v9z953m8dsn9epfmf0cwelwcwzvg0prv53",
+          "gasLimit": 1000000,
+          "gasPrice": "0",
+          "version": 1,
+          "senderPubKey": "1fc5aec4197bdff4106cff9fe8c2052db51fbb6ed2b35e4ffe0c8ad4d9211c8583f88b0632e790f79431a7ab47e364f05d87aad37644639fb35a99cc26d497eff1e278a39ea5e300"
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "signSettleDeposit",
+      "params": [
+        {
+          "settleDeposit": {
+            "amount": "1",
+            "sender": "io1qyqsqqqqsqw4v9z953m8dsn9epfmf0cwelwcwzvgje7a2g",
+            "recipient": "io1qypqqqqqsqw4v9z953m8dsn9epfmf0cwelwcwzvg0prv53",
+            "gasLimit": 1000000,
+            "gasPrice": "0",
+            "version": 1,
+            "senderPubKey": "1fc5aec4197bdff4106cff9fe8c2052db51fbb6ed2b35e4ffe0c8ad4d9211c8583f88b0632e790f79431a7ab47e364f05d87aad37644639fb35a99cc26d497eff1e278a39ea5e300",
+            "nonce": 14,
+            "index": 14
+          },
+          "address": {
+            "publicKey": "1fc5aec4197bdff4106cff9fe8c2052db51fbb6ed2b35e4ffe0c8ad4d9211c8583f88b0632e790f79431a7ab47e364f05d87aad37644639fb35a99cc26d497eff1e278a39ea5e300",
+            "privateKey": "685ca0b7276cff60fc9bb378e79bb785f8421aa766bb4f0069d99f8505f009d5210cb401",
+            "rawAddress": "io1qypqqqqqsqw4v9z953m8dsn9epfmf0cwelwcwzvg0prv53"
+          }
+        }
+      ],
+      "jsonrpc": "2.0",
+      "id": "3"
+    },
+    "response": {
+      "id": "3",
+      "jsonrpc": "2.0",
+      "result": {
+        "settleDeposit": {
+          "nonce": 14,
+          "signature": "42d6f6503f7ddb519ed577d203aea933e6fdf0f6dab87550b3e502bf74ca82ce9618e000aa1cb40735d6acd55e6b25f1e0d56018526cb57668988e37015bbcbba59f61bfa5d3e501",
+          "amount": "1",
+          "index": 14,
+          "sender": "io1qyqsqqqqsqw4v9z953m8dsn9epfmf0cwelwcwzvgje7a2g",
+          "recipient": "io1qypqqqqqsqw4v9z953m8dsn9epfmf0cwelwcwzvg0prv53",
+          "gasLimit": 1000000,
+          "gasPrice": "0",
+          "version": 1,
+          "senderPubKey": "1fc5aec4197bdff4106cff9fe8c2052db51fbb6ed2b35e4ffe0c8ad4d9211c8583f88b0632e790f79431a7ab47e364f05d87aad37644639fb35a99cc26d497eff1e278a39ea5e300"
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,72 @@
+[
+  {
+    "request": {
+      "method": "Explorer.getAddressDetails",
+      "params": [
+        "io1qyqsqqqqsqw4v9z953m8dsn9epfmf0cwelwcwzvgje7a2g"
+      ],
+      "jsonrpc": "2.0",
+      "id": "0"
+    },
+    "response": {
+      "jsonrpc": "2.0",
+      "id": "0",
+      "result": {
+        "address": "io1qyqsqqqqsqw4v9z953m8dsn9epfmf0cwelwcwzvgje7a2g",
+        "totalBalance": "7999999999999999987",
+        "nonce": 13,
+        "pendingNonce": 14,
+        "isCandidate": false
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "Explorer.createDeposit",
+      "params": [
+        {
+          "nonce": 14,
+          "signature": "2642d0c441361f3d452ac3106f136442abe0871cc8928ce1aea28f75a5f079ee2d6b49018a7bebff257da1764ea700322c3a4a9254423d8880e7195cb8c26cb64d0d94078bca9b00",
+          "amount": "1",
+          "sender": "io1qyqsqqqqsqw4v9z953m8dsn9epfmf0cwelwcwzvgje7a2g",
+          "recipient": "io1qypqqqqqsqw4v9z953m8dsn9epfmf0cwelwcwzvg0prv53",
+          "gasLimit": 1000000,
+          "gasPrice": "0",
+          "version": 1,
+          "senderPubKey": "1fc5aec4197bdff4106cff9fe8c2052db51fbb6ed2b35e4ffe0c8ad4d9211c8583f88b0632e790f79431a7ab47e364f05d87aad37644639fb35a99cc26d497eff1e278a39ea5e300"
+        }
+      ],
+      "jsonrpc": "2.0",
+      "id": "1"
+    },
+    "response": {
+      "jsonrpc": "2.0",
+      "id": "1",
+      "result": {
+        "hash": "2ffa3b6b1d645dd71ef7ecf0b4e363f4fb34fc2f00db1e80a08bdfa900dad295"
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "Explorer.getReceiptByExecutionID",
+      "params": [
+        "2ffa3b6b1d645dd71ef7ecf0b4e363f4fb34fc2f00db1e80a08bdfa900dad295"
+      ],
+      "jsonrpc": "2.0",
+      "id": "2"
+    },
+    "response": {
+      "jsonrpc": "2.0",
+      "id": "2",
+      "result": {
+        "returnValue": "0e00000000000000",
+        "status": 0,
+        "hash": "2ffa3b6b1d645dd71ef7ecf0b4e363f4fb34fc2f00db1e80a08bdfa900dad295",
+        "gasConsumed": 10000,
+        "contractAddress": "io1qyqsqqqqpqd7xterq0yps972qs3eqf58wvd6j2gxp790ya",
+        "logs": []
+      }
+    }
+  }
+]

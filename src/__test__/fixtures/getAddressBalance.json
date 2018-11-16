@@ -1,0 +1,17 @@
+[
+  {
+    "request": {
+      "method": "Explorer.getAddressBalance",
+      "params": [
+        "io1qyqsyqcy8fvhk9ee75jkrs6sqwppdplt8lpd87p7k95zpk"
+      ],
+      "jsonrpc": "2.0",
+      "id": "0"
+    },
+    "response": {
+      "jsonrpc": "2.0",
+      "id": "0",
+      "result": "0"
+    }
+  }
+]

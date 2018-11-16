@@ -1,0 +1,15 @@
+[
+  {
+    "request": {
+      "method": "Explorer.getBlockchainHeight",
+      "params": [],
+      "jsonrpc": "2.0",
+      "id": "0"
+    },
+    "response": {
+      "jsonrpc": "2.0",
+      "id": "0",
+      "result": 2475
+    }
+  }
+]

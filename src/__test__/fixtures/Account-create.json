@@ -1,0 +1,21 @@
+[
+  {
+    "request": {
+      "method": "generateWallet",
+      "params": [
+        1
+      ],
+      "jsonrpc": "2.0",
+      "id": "0"
+    },
+    "response": {
+      "id": "0",
+      "jsonrpc": "2.0",
+      "result": {
+        "publicKey": "ad71149803ef281b7d8ec13943751794dafaec8418f38a0b70d10d49fbf12b8a9e9f3505279f0333fe53ad5658e6b015264be438443917d7ef6b3ed5792a2f6396e27b7ba922d607",
+        "privateKey": "06d84a540eea3cd26d97a8ad1d148f63cd9b5a9b2b01a598601af9d8e36a94d9e1a62d01",
+        "rawAddress": "io1qyqsqqqqhgypst5jn3jll3cytvdeh6fv5v0kt2cdz267qz"
+      }
+    }
+  }
+]

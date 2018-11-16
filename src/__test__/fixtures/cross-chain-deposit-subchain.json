@@ -1,0 +1,30 @@
+[
+  {
+    "request": {
+      "method": "Explorer.settleDeposit",
+      "params": [
+        {
+          "nonce": 14,
+          "signature": "42d6f6503f7ddb519ed577d203aea933e6fdf0f6dab87550b3e502bf74ca82ce9618e000aa1cb40735d6acd55e6b25f1e0d56018526cb57668988e37015bbcbba59f61bfa5d3e501",
+          "amount": "1",
+          "index": 14,
+          "sender": "io1qyqsqqqqsqw4v9z953m8dsn9epfmf0cwelwcwzvgje7a2g",
+          "recipient": "io1qypqqqqqsqw4v9z953m8dsn9epfmf0cwelwcwzvg0prv53",
+          "gasLimit": 1000000,
+          "gasPrice": "0",
+          "version": 1,
+          "senderPubKey": "1fc5aec4197bdff4106cff9fe8c2052db51fbb6ed2b35e4ffe0c8ad4d9211c8583f88b0632e790f79431a7ab47e364f05d87aad37644639fb35a99cc26d497eff1e278a39ea5e300"
+        }
+      ],
+      "jsonrpc": "2.0",
+      "id": "0"
+    },
+    "response": {
+      "jsonrpc": "2.0",
+      "id": "0",
+      "result": {
+        "hash": "4f6be455e5ae799fc788478067495d5a2309acecda0f55fbc150b85bf00e342a"
+      }
+    }
+  }
+]

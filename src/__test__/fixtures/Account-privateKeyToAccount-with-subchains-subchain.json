@@ -1,0 +1,22 @@
+[
+  {
+    "request": {
+      "method": "unlockWallet",
+      "params": [
+        "a51d62a858ff661b42c2b55144e97ea94b31f1e16519072b43121eebf8657a84e6850400",
+        2
+      ],
+      "jsonrpc": "2.0",
+      "id": "0"
+    },
+    "response": {
+      "id": "0",
+      "jsonrpc": "2.0",
+      "result": {
+        "publicKey": "bebe2906b8ff265c00d0a136706407b0062283d9a4cdfd3ab014223c37322ef66f221707fe369454b14e06824222541dc39fc9f8aa74a0c6e6f8c53d615eab9c2db72aad266d5f00",
+        "privateKey": "a51d62a858ff661b42c2b55144e97ea94b31f1e16519072b43121eebf8657a84e6850400",
+        "rawAddress": "io1qypqqqqq7ys0xqt7fechq9hu4nwuq6hyh0gx5ngf26037w"
+      }
+    }
+  }
+]

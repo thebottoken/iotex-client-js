@@ -1,0 +1,23 @@
+[
+  {
+    "request": {
+      "method": "Explorer.getAddressDetails",
+      "params": [
+        "io1qyqsqqqqcyumn4hnvcr5mgyc0u37luyrxj67f2hkmsud0f"
+      ],
+      "jsonrpc": "2.0",
+      "id": "0"
+    },
+    "response": {
+      "jsonrpc": "2.0",
+      "id": "0",
+      "result": {
+        "address": "io1qyqsqqqqcyumn4hnvcr5mgyc0u37luyrxj67f2hkmsud0f",
+        "totalBalance": "6999999999999999988",
+        "nonce": 12,
+        "pendingNonce": 13,
+        "isCandidate": false
+      }
+    }
+  }
+]

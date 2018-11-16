@@ -1,0 +1,81 @@
+[
+  {
+    "request": {
+      "method": "unlockWallet",
+      "params": [
+        "71e2be256393a9cc7ce1945aacfc10df4f8bcfcb5a1cfa3b0f5e7a9fd213b5c188f5fc00",
+        1
+      ],
+      "jsonrpc": "2.0",
+      "id": "0"
+    },
+    "response": {
+      "id": "0",
+      "jsonrpc": "2.0",
+      "result": {
+        "publicKey": "53d0c2d42a1c1f2d724ca8509884f3f3172cf492a2c8293062e638c850e278e72cc3c7015ac7a25f9ae6b70d4511048daa07378ba3a882bcae48faebd204f65eafd58d5f544ea807",
+        "privateKey": "71e2be256393a9cc7ce1945aacfc10df4f8bcfcb5a1cfa3b0f5e7a9fd213b5c188f5fc00",
+        "rawAddress": "io1qyqsqqqqq5phety62gqrgdgqedernw5gym9lmltsgacped"
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "generateWallet",
+      "params": [
+        1
+      ],
+      "jsonrpc": "2.0",
+      "id": "1"
+    },
+    "response": {
+      "id": "1",
+      "jsonrpc": "2.0",
+      "result": {
+        "publicKey": "94db3f3e7424d9ceb23b99b4ad758eef3114c2ca6b5766c3d912a8b79dd9a0aee517f70153c2fe539db01d071e61dac704e14284ae18ec4acfb4e0ab0a6fac99bbff9bbd8ce0c400",
+        "privateKey": "6b2d958832072bb0c902b706c7f94f62a164ede674ee7c781645c4672c224d413e74cb01",
+        "rawAddress": "io1qyqsqqqqw2724uqvpt85j4lwtf0x56p6eaarcee30atp26"
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "signTransfer",
+      "params": [
+        {
+          "publicKey": "53d0c2d42a1c1f2d724ca8509884f3f3172cf492a2c8293062e638c850e278e72cc3c7015ac7a25f9ae6b70d4511048daa07378ba3a882bcae48faebd204f65eafd58d5f544ea807",
+          "privateKey": "71e2be256393a9cc7ce1945aacfc10df4f8bcfcb5a1cfa3b0f5e7a9fd213b5c188f5fc00",
+          "rawAddress": "io1qyqsqqqqq5phety62gqrgdgqedernw5gym9lmltsgacped"
+        },
+        {
+          "amount": "1",
+          "sender": "io1qyqsqqqqq5phety62gqrgdgqedernw5gym9lmltsgacped",
+          "senderPubKey": "53d0c2d42a1c1f2d724ca8509884f3f3172cf492a2c8293062e638c850e278e72cc3c7015ac7a25f9ae6b70d4511048daa07378ba3a882bcae48faebd204f65eafd58d5f544ea807",
+          "recipient": "io1qyqsqqqqw2724uqvpt85j4lwtf0x56p6eaarcee30atp26",
+          "gasPrice": "1",
+          "gasLimit": 10000,
+          "nonce": 13
+        }
+      ],
+      "jsonrpc": "2.0",
+      "id": "2"
+    },
+    "response": {
+      "id": "2",
+      "jsonrpc": "2.0",
+      "result": {
+        "nonce": 13,
+        "signature": "c259afe38783a902d402e85b617be5d533e8994da61c9e749a457c761e1252e826d5180092bf876522ec40a684a49c4f4a4fa9ba289ebc8fca6be54e8b5ec78d7ea87dc89cfce701",
+        "amount": "1",
+        "sender": "io1qyqsqqqqq5phety62gqrgdgqedernw5gym9lmltsgacped",
+        "recipient": "io1qyqsqqqqw2724uqvpt85j4lwtf0x56p6eaarcee30atp26",
+        "payload": "",
+        "gasLimit": 10000,
+        "gasPrice": "1",
+        "version": 1,
+        "senderPubKey": "53d0c2d42a1c1f2d724ca8509884f3f3172cf492a2c8293062e638c850e278e72cc3c7015ac7a25f9ae6b70d4511048daa07378ba3a882bcae48faebd204f65eafd58d5f544ea807",
+        "isCoinbase": false
+      }
+    }
+  }
+]

@@ -1,7 +1,8 @@
 import test from 'ava';
 import {Accounts} from '../remote-accounts';
 import {Iotx} from '../../iotx';
-import {HttpProvider} from '../../provider';
+import {MockProvider} from '../../__test__/mock-provider';
+import {TEST_ACCOUNTS, TEST_WALLET_CORE_URL} from '../../__test__/config';
 
 const TEST_WALLET = {
   privateKey: 'c5364b1a2d99d127439be22edfd657889981e9ba4d6d18fe8eca489d48485371efcb2400',
@@ -10,7 +11,7 @@ const TEST_WALLET = {
 };
 
 test('Account create', async t => {
-  const accounts = new Accounts();
+  const accounts = new Accounts(null, null, new MockProvider(t, TEST_WALLET_CORE_URL));
   const wallet = await accounts.create();
   t.truthy(wallet.publicKey);
   t.truthy(wallet.privateKey);
@@ -18,16 +19,23 @@ test('Account create', async t => {
 });
 
 test('Account add', async t => {
-  const accounts = new Accounts();
+  const accounts = new Accounts(null, null, new MockProvider(t, TEST_WALLET_CORE_URL));
   const wallet = await accounts.add(TEST_WALLET.privateKey);
   t.deepEqual(wallet.publicKey, TEST_WALLET.publicKey);
 });
 
 test('Account privateKeyToAccount with subchains', async t => {
-  const privKey = '6e21c91382c5e10a5c6568dd38a5a2a6e9800ad86eae41748c8d389a14e0ed127766a200';
-  const mainChain = new Iotx(new HttpProvider('http://159.89.221.214:14004/'), {chainId: 1, walletProvider: new HttpProvider('http://localhost:4004/api/wallet-core/')});
+  const privKey = TEST_ACCOUNTS[6];
+  const mainChain = new Iotx(null, {
+    chainId: 1,
+    walletProvider: new MockProvider(t, TEST_WALLET_CORE_URL, `${t.title}-mainchain`),
+  });
   const mainChainWallet = await mainChain.accounts.privateKeyToAccount(privKey);
-  const subChain = new Iotx(new HttpProvider('http://localhost:4005/'), {chainId: 2, walletProvider: new HttpProvider('http://localhost:4005/api/wallet-core/')});
+  const subChain = new Iotx(null,
+    {
+      chainId: 2,
+      walletProvider: new MockProvider(t, TEST_WALLET_CORE_URL, `${t.title}-subchain`),
+    });
   const subChainWallet = await subChain.accounts.privateKeyToAccount(privKey);
   t.not(mainChainWallet.rawAddress, subChainWallet.rawAddress);
 });

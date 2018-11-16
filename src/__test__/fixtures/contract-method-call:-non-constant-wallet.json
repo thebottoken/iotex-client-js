@@ -1,0 +1,61 @@
+[
+  {
+    "request": {
+      "method": "unlockWallet",
+      "params": [
+        "02445058a454ebf19737e5e3445aeb8469d073a0f40301cebf65c587c2877084fb1f8101",
+        1
+      ],
+      "jsonrpc": "2.0",
+      "id": "0"
+    },
+    "response": {
+      "id": "0",
+      "jsonrpc": "2.0",
+      "result": {
+        "publicKey": "131c3f3e6d2b53acdc597fd1840664a1bde2f3b6dce6bf47cd9c59064c938b1be6b4a2052cb440f77de57d24a054fef6da9ea6b356c3e427fe4b6facc60d8fb5906ef7b69b96f601",
+        "privateKey": "02445058a454ebf19737e5e3445aeb8469d073a0f40301cebf65c587c2877084fb1f8101",
+        "rawAddress": "io1qyqsqqqqg4y9ksdnfmrvexrlmr6xykm45ke6e8962zruvh"
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "signSmartContract",
+      "params": [
+        {
+          "publicKey": "131c3f3e6d2b53acdc597fd1840664a1bde2f3b6dce6bf47cd9c59064c938b1be6b4a2052cb440f77de57d24a054fef6da9ea6b356c3e427fe4b6facc60d8fb5906ef7b69b96f601",
+          "privateKey": "02445058a454ebf19737e5e3445aeb8469d073a0f40301cebf65c587c2877084fb1f8101",
+          "rawAddress": "io1qyqsqqqqg4y9ksdnfmrvexrlmr6xykm45ke6e8962zruvh"
+        },
+        {
+          "byteCode": "1e67bed8000000000000000000000000000000000000000000000000000000000000004000000000000000000000000045485b41b34ec6cc987fd8f4625b75a5b3ac9cba00000000000000000000000000000000000000000000000000000000000000026964000000000000000000000000000000000000000000000000000000000000",
+          "nonce": 13,
+          "gasLimit": 100000,
+          "gasPrice": "0",
+          "version": 1,
+          "amount": "0",
+          "contract": "io1qyqsqqqqmd6z6fwlp8kfl0r8lg2hj5ek4txq6gc82lvkgm"
+        }
+      ],
+      "jsonrpc": "2.0",
+      "id": "1"
+    },
+    "response": {
+      "id": "1",
+      "jsonrpc": "2.0",
+      "result": {
+        "version": 1,
+        "nonce": 13,
+        "signature": "3bf548bd57cdcf95afc40492ab8a0965d506391ce69fea65ae948c136be218232fb1720114b15d18ce1230db66565db309143df05eaa5565b7baefd8892c060cd55a66854054c200",
+        "executorPubKey": "131c3f3e6d2b53acdc597fd1840664a1bde2f3b6dce6bf47cd9c59064c938b1be6b4a2052cb440f77de57d24a054fef6da9ea6b356c3e427fe4b6facc60d8fb5906ef7b69b96f601",
+        "amount": "0",
+        "executor": "io1qyqsqqqqg4y9ksdnfmrvexrlmr6xykm45ke6e8962zruvh",
+        "contract": "io1qyqsqqqqmd6z6fwlp8kfl0r8lg2hj5ek4txq6gc82lvkgm",
+        "gasLimit": 100000,
+        "gasPrice": "0",
+        "data": ""
+      }
+    }
+  }
+]

@@ -1,6 +1,14 @@
+/* eslint-disable max-statements */
 import test from 'ava';
 import {setTimeout} from 'global/window';
-import {HttpProvider, Iotx} from '../main';
+import {Iotx} from '../main';
+import {
+  TEST_ACCOUNTS,
+  TEST_IOTEX_CORE_SUBCHAIN_URL,
+  TEST_IOTEX_CORE_URL,
+  TEST_WALLET_CORE_URL,
+} from './config';
+import {MockProvider} from './mock-provider';
 
 const sleep = async time => new Promise(resolve => setTimeout(() => resolve(), time));
 
@@ -13,11 +21,12 @@ test('parseIntFromHexLE', async t => {
 });
 
 test('cross-chain deposit', async t => {
-  const privKey = '6e21c91382c5e10a5c6568dd38a5a2a6e9800ad86eae41748c8d389a14e0ed127766a200';
-  const mainChain = new Iotx(new HttpProvider('http://159.89.221.214:14004/'), {chainId: 1});
+  const privKey = TEST_ACCOUNTS[4];
+  const walletProvider = new MockProvider(t, TEST_WALLET_CORE_URL, `${t.title}-wallet`);
+  const mainChain = new Iotx(new MockProvider(t, TEST_IOTEX_CORE_URL, `${t.title}-mainchain`), {chainId: 1, walletProvider});
   const mainChainWallet = await mainChain.accounts.privateKeyToAccount(privKey);
-  const subChain = new Iotx(new HttpProvider('http://159.89.221.214:14005/'), {chainId: 2});
-  const subChainWallet = await subChain.accounts.privateKeyToAccount(privKey); // 地址不对
+  const subChain = new Iotx(new MockProvider(t, TEST_IOTEX_CORE_SUBCHAIN_URL, `${t.title}-subchain`), {chainId: 2, walletProvider});
+  const subChainWallet = await subChain.accounts.privateKeyToAccount(privKey);
 
   const createDeposit = {
     amount: '1',
