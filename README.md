@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/iotexproject/iotex-client-js.svg?style=svg)](https://circleci.com/gh/iotexproject/iotex-client-js)
+
 # iotex-client-js
 
 ```bash
