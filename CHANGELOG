@@ -1,3 +1,11 @@
+2018-11-28 - 0.1.5 (6bb5650)
+6bb5650 (HEAD -> master) fix rau conversion bug
+4ecbd26 (origin/master, origin/HEAD) misc cleanups
+ceab031 fix circle ci
+7f40036 update test fixtures
+6d5f3f9 (tag: v0.1.4) 0.1.4
+
+
 2018-11-14 - 0.1.4 (91792eb)
 91792eb (HEAD -> master, origin/master, origin/HEAD) add toRau
 97dcfeb update rpcs
