@@ -1,3 +1,8 @@
+2018-11-28 - 0.1.6 (9dd1785)
+9dd1785 (HEAD -> master) remove postinstall
+16d4dfb (tag: v0.1.5, origin/master, origin/HEAD) 0.1.5
+
+
 2018-11-28 - 0.1.5 (6bb5650)
 6bb5650 (HEAD -> master) fix rau conversion bug
 4ecbd26 (origin/master, origin/HEAD) misc cleanups
