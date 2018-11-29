@@ -28,16 +28,16 @@ function convert(num: string, unit: string, operator: string) {
   case 'Rau':
     return num;
   case 'KRau':
-    return rauBN[operator](new BigNumber('1000')).toString();
+    return rauBN[operator](new BigNumber('1000')).toString(10);
   case 'MRau':
-    return rauBN[operator](new BigNumber('1000000')).toString();
+    return rauBN[operator](new BigNumber('1000000')).toString(10);
   case 'GRau':
-    return rauBN[operator](new BigNumber('1000000000')).toString();
+    return rauBN[operator](new BigNumber('1000000000')).toString(10);
   case 'Qev':
-    return rauBN[operator](new BigNumber('1000000000000')).toString();
+    return rauBN[operator](new BigNumber('1000000000000')).toString(10);
   case 'Jing':
-    return rauBN[operator](new BigNumber('1000000000000000')).toString();
+    return rauBN[operator](new BigNumber('1000000000000000')).toString(10);
   default:
-    return rauBN[operator](new BigNumber('1000000000000000000')).toString();
+    return rauBN[operator](new BigNumber('1000000000000000000')).toString(10);
   }
 }

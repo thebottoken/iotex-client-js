@@ -22,4 +22,6 @@ test('toRau', async t => {
   t.is(toRau('2002000', 'Qev'), rau);
   t.is(toRau('2002', 'Jing'), rau);
   t.is(toRau('2.002', 'Iotx'), rau);
+
+  t.is(toRau('10000.002', 'Iotx'), '10000002000000000000000');
 });

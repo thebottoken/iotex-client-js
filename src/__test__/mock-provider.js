@@ -44,19 +44,17 @@ export class MockProvider implements Provider {
       params: request.params || [],
     };
 
-    if (!REFRESH_FIXTURE) {
+    if (!REFRESH_FIXTURE || REFRESH_FIXTURE === 'false') {
       if ('request' in fixture) {
         this.t.deepEqual(request, fixture.request);
       }
-      if ('response' in fixture) {
-        return fixture.response || {
-          result: 'any',
-          error: {
-            code: 1,
-            message: '',
-          },
-        };
-      }
+      return fixture.response || {
+        result: 'any',
+        error: {
+          code: 1,
+          message: '',
+        },
+      };
     }
 
     let resp;
