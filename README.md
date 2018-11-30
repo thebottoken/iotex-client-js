@@ -1,4 +1,5 @@
 [![CircleCI](https://circleci.com/gh/iotexproject/iotex-client-js.svg?style=svg)](https://circleci.com/gh/iotexproject/iotex-client-js)
+[![npm version](https://badge.fury.io/js/iotex-client-js.svg)](https://badge.fury.io/js/iotex-client-js)
 
 # iotex-client-js
 
