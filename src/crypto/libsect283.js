@@ -1739,3 +1739,12 @@ function ECDSAVerifyMsg(curve, Ql, msg, sig) {
   }
   throw new Error(' No hash function of adequate security strength is available! ');
 }
+
+export {
+  rbg128Instantiate,
+  ecKeyPairGeneration,
+  binaryCurve_K283,
+  uint32ArraytoBitArray,
+  bigInttoHex,
+  ecPublicKeyValidation,
+};
