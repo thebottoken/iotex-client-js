@@ -1741,10 +1741,14 @@ function ECDSAVerifyMsg(curve, Ql, msg, sig) {
 }
 
 export {
-  rbg128Instantiate,
-  ecKeyPairGeneration,
-  binaryCurve_K283,
-  uint32ArraytoBitArray,
   bigInttoHex,
+  binaryCurve_K283,
+  ECDSASignMsg,
+  ECDSAVerifyMsg,
+  ecKeyPairGeneration,
   ecPublicKeyValidation,
+  hextoBigInt,
+  hextoBitArray,
+  rbg128Instantiate,
+  uint32ArraytoBitArray,
 };
