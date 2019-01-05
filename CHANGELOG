@@ -1,3 +1,14 @@
+2019-01-05 - 0.1.7 (96ff7c1)
+96ff7c1 (HEAD -> master, origin/master, origin/HEAD) fix some fields mismatch
+664817c add ECDSAVerifyMsg testcase
+7d5ed24 add ecKeyPairGeneration test
+9fd9d2e lint libsect 283
+f697285 add libsec283
+b72f3a8 add npm version badge
+b54f4e3 add flow install to circleci (#1)
+33e0bf6 (tag: v0.1.6) 0.1.6
+
+
 2018-11-28 - 0.1.6 (9dd1785)
 9dd1785 (HEAD -> master) remove postinstall
 16d4dfb (tag: v0.1.5, origin/master, origin/HEAD) 0.1.5
