@@ -58,7 +58,6 @@ export class Iotx {
       senderPubKey: transfer.senderPubKey,
       gasLimit: transfer.gasLimit,
       gasPrice: transfer.gasPrice,
-
     };
 
     const {hash} = await this.rpcMethods.sendTransfer(adapted);

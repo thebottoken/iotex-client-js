@@ -46,7 +46,7 @@ test('contract getNextNonce', async t => {
 test('contract deploy', async t => {
   const {contract, bytecode} = await createTestContract(t, new MockProvider(t, TEST_IOTEX_CORE_URL), TEST_ACCOUNTS[0]);
   const exec = await contract.deploy({
-    byteCode: bytecode,
+    data: bytecode,
     gasLimit: 100000,
     gasPrice: '0',
     version: 1,
@@ -85,18 +85,18 @@ test.skip('contract method call: constant', async t => {
 // eslint-disable-next-line max-statements
 test.skip('simple storage deploy and call', async t => {
   const solidityFileString = `
-pragma solidity ^0.4.0;
+pragma solidity ^0.4.16;
 
 contract SimpleStorage {
-    uint storedData;
+   uint storedData;
 
-    function set(uint x) public {
-        storedData = x;
-    }
+   function set(uint x) public {
+       storedData = x;
+   }
 
-    function get() public view returns (uint) {
-        return storedData;
-    }
+   function get() public view returns (uint) {
+       return storedData;
+   }
 }
 `;
   const contractName = ':SimpleStorage';

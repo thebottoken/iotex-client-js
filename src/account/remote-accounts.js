@@ -34,7 +34,7 @@ export type TUnsignedTransfer = {
  * UnsignedExecution is the type of the unsigned execution to be signed.
  */
 export type TUnsignedExecution = {
-  byteCode: string,
+  data: string,
   nonce: ?number,
   gasLimit: number,
   version: number,

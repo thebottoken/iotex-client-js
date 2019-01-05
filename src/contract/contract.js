@@ -87,11 +87,7 @@ export class Contract {
 
         // constant function
         if (this._abiFunctions[func].constant) {
-          const {error, result} = await this._readExecutionState({data, input: userInput});
-          if (error) {
-            throw new Error(`cannot readExecutionState: ${JSON.stringify(error)}`);
-          }
-          return result;
+          return await this._readExecutionState({data, input: userInput});
         }
 
         // non-constant function
@@ -144,7 +140,7 @@ export class Contract {
 
   async _signContractBytecode(data: string) {
     const unsigned = {
-      byteCode: data || '',
+      data: data || '',
       nonce: this.methodsOpts.nonce,
       gasLimit: this.methodsOpts.gasLimit,
       gasPrice: this.methodsOpts.gasPrice,
