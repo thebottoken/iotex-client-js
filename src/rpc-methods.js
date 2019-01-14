@@ -433,7 +433,7 @@ export class RpcMethods {
    * get list of transfers by start block height, transfer offset and limit
    */
   async getLastTransfersByRange(startBlockHeight: number, offset: number, limit: number, showCoinBase: boolean): Promise<Array<TTransfer>> {
-    return await this.send(this.getLastTransfersByRange.name, startBlockHeight, offset, showCoinBase);
+    return await this.send(this.getLastTransfersByRange.name, startBlockHeight, offset, limit, showCoinBase);
   }
 
   /**
