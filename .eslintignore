@@ -4,4 +4,4 @@ _maps/*
 coverage/*
 .nyc_output/*
 flow-typed/*
-docs/*
+doc/*

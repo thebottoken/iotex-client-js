@@ -36,6 +36,8 @@ type TBlock = {
   amount: string,
   forged: number,
   size: number,
+  txRoot: string,
+  stateRoot: string,
 }
 
 /**
@@ -645,6 +647,13 @@ export class RpcMethods {
   }
 
   /**
+   * get receipt by action id
+   */
+  async getReceiptByActionID(id: string): Promise<TReceipt> {
+    return await this.send(this.getReceiptByActionID.name, id);
+  }
+
+  /**
    * get receipt by execution id
    */
   async getReceiptByExecutionID(id: string): Promise<TReceipt> {
@@ -712,5 +721,12 @@ export class RpcMethods {
    */
   async estimateGasForSmartContract(request: TExecution): Promise<number> {
     return await this.send(this.estimateGasForSmartContract.name, request);
+  }
+
+  /**
+   * get the state root hash of a given block height
+   */
+  async getStateRootHash(blockHeight: number): Promise<string> {
+    return await this.send(this.getStateRootHash.name, blockHeight);
   }
 }

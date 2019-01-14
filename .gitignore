@@ -49,4 +49,4 @@ flow-typed/npm/
 .env
 dump.rdb
 .vscode/
-docs/
+doc/
