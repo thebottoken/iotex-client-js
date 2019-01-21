@@ -12,6 +12,8 @@ nvm use 8.12.0
 npm install
 
 # test
+# prepare flow type definitions
+npm run flow-install
 # run all tests
 npm run test
 # run a single test file
