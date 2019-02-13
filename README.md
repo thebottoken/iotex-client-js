@@ -8,7 +8,7 @@ Please check documentations at [https://docs.iotex.io](https://docs.iotex.io/doc
 ## Development
 
 ```bash
-nvm use 8.12.0
+nvm use 10.15.1
 npm install
 
 # test
